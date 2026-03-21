@@ -1,0 +1,202 @@
+Build a frontend prototype for a web app called FridgeBrain. 
+This is a household grocery management app. Use fake/hardcoded 
+mock data throughout — no real backend needed. This is a 
+clickable prototype to validate the design and user flows.
+
+---
+
+TECH STACK:
+- Single page app using HTML, CSS, and vanilla JavaScript
+- All in one folder, no frameworks needed
+- Must work by opening index.html in a browser
+- Mobile-first design (375px wide, like an iPhone)
+- Center the app on desktop inside a phone-frame container
+
+---
+
+DESIGN DIRECTION:
+Clean, minimal, Apple-inspired. Think Robinhood meets WhatsApp.
+- Background: #FFFFFF
+- Primary accent color: #00C853 (fresh green — food/grocery feel)
+- Secondary: #F5F5F5 for surfaces
+- Text primary: #1A1A1A
+- Text secondary: #757575
+- Font: Use Google Fonts — "Inter" for everything
+- Bottom of every screen has a hamburger menu icon top left
+- No clutter. Every screen has one clear purpose.
+- Generous white space
+- Subtle rounded corners (12px) on all cards
+- Smooth transitions between screens (fade or slide)
+- The entire app lives inside a centered phone frame on desktop
+  (390px wide, 844px tall, with subtle shadow and rounded corners)
+
+---
+
+SCREENS TO BUILD:
+
+SCREEN 1 — Login/Signup (shown only when logged out)
+- FridgeBrain logo centered (just the wordmark in bold Inter)
+- Small green fridge emoji or simple icon above the name
+- "Welcome back" headline
+- Email input field
+- Password input field
+- "Sign In" green button
+- "New here? Create account" link below
+- Signup screen: Name, Email, Password, "Create Account" button
+- After login/signup → goes to Home screen
+- Use fake credentials: any email/password works
+
+---
+
+SCREEN 2 — Home (default screen when logged in)
+- Top bar: "FridgeBrain" logo left, profile avatar circle right
+  (show initials, e.g. "EB" for Elliot Boz)
+- Household selector below top bar — shows current household
+  name with a dropdown arrow (e.g. "🏠 The Apartment")
+  Clicking it shows two fake households to switch between:
+  "The Apartment" and "Family Home"
+- Section: "To-Buy List" 
+  Show 5-6 fake items with:
+  - Product photo (use placeholder colored squares for now)
+  - Item name (e.g. "Whole Milk", "Sourdough Bread")
+  - Who requested it and when (e.g. "Added by Jake · 2h ago")
+  - Small checkbox to mark as bought
+  - Tapping an item expands it to show notes/details
+- Floating green button bottom right: "🛒 I'm at the store"
+  Pressing it opens a confirmation modal:
+  "Notify your household you're shopping?"
+  Shows which store (fake: "Whole Foods")
+  Two buttons: "Yes, notify them" and "Cancel"
+  After confirming → shows success toast: 
+  "Your household has been notified!"
+- Empty state if list is empty: 
+  "Nothing on the list yet — add something below"
+  with a + button
+
+---
+
+SCREEN 3 — Inventory (what the household currently has)
+- Accessible from hamburger menu
+- Grid of cards showing current items:
+  Each card: colored placeholder image, item name, 
+  quantity, and a status indicator:
+  Green = plenty, Yellow = running low, Red = almost out
+- Show 8-10 fake items across different categories
+  (Dairy, Produce, Pantry, etc.)
+- Category filter tabs at top (All, Dairy, Produce, Pantry, etc.)
+- Each item has a "Running low" button that adds it to to-buy list
+  with a confirmation: "Added to to-buy list!"
+- "+" button to manually add new inventory item
+
+---
+
+SCREEN 4 — Receipt Scanner
+- Accessible from hamburger menu
+- Big centered upload area with dashed border:
+  Camera icon + "Take a photo of your receipt"
+  Below: "or upload from your gallery"
+- After "uploading" (fake — just tap to simulate):
+  Show a loading spinner for 2 seconds
+  Then show "Receipt processed!" 
+  Display a fake parsed receipt:
+  List of items with checkboxes (pre-checked):
+  "Whole Milk x1 — $4.99"
+  "Sourdough Bread x1 — $6.49"
+  "Eggs (12ct) x1 — $5.99"
+  "Orange Juice x1 — $4.29"
+  Total: $21.76
+  "Add to inventory" green button at bottom
+  "Split costs with household?" secondary button
+
+---
+
+SCREEN 5 — Cost Splitting
+- Accessible from receipt screen or hamburger menu
+- Shows current unsettled expenses
+- Each entry: who bought, what store, total amount, date
+- Expandable to show itemized breakdown
+- Each household member shown with their share
+- Two buttons per entry: "Settle via Venmo" and 
+  "Settle via Splitwise" (fake links for now)
+- Running total at top: "You are owed $12.40" in green
+  or "You owe $8.20" in red
+- Settled expenses in a separate "History" section below
+
+---
+
+SCREEN 6 — Activity Feed
+- Accessible from hamburger menu  
+- Chronological feed of household activity:
+  "Jake bought groceries at Whole Foods · 2h ago"
+  "Sarah added Oat Milk to the list · 4h ago"
+  "Tom marked Eggs as running low · Yesterday"
+  "Jake is at Trader Joe's — need anything? · 2d ago"
+- Each entry has a small avatar with initials
+- Clean timeline style with subtle dividers
+- Filter by household member at top
+
+---
+
+SCREEN 7 — Profile & Settings
+- Accessible from avatar in top right or hamburger menu
+- User's name and email
+- Their households listed with member count
+- "Create new household" button
+- "Join a household" button (shows fake invite code input)
+- Notification preferences toggles:
+  "Someone is at the store" toggle
+  "Item added to list" toggle  
+  "Running low reminder" toggle
+- "Linked stores" section — list of saved store locations
+  (fake: Whole Foods, Trader Joe's, Target)
+  "Add a store" button
+- Sign out button at bottom
+
+---
+
+HAMBURGER MENU:
+Slides in from left when hamburger icon tapped
+Shows:
+- User avatar and name at top
+- Home (to-buy list)
+- Inventory
+- Receipt Scanner
+- Cost Splitting
+- Activity
+- Profile & Settings
+- Sign Out at bottom
+Overlay darkens the rest of the screen
+Tapping outside closes it
+
+---
+
+MOCK DATA TO USE THROUGHOUT:
+User: Elliot Boz (EB)
+Household 1: "The Apartment" — members: Elliot, Jake, Sarah
+Household 2: "Family Home" — members: Elliot, Mom, Dad, Tom
+
+To-buy list items:
+- Whole Milk (requested by Jake, 2h ago)
+- Sourdough Bread (requested by Sarah, 4h ago)  
+- Eggs (requested by Elliot, yesterday)
+- Oat Milk (requested by Mom, 1d ago)
+- Olive Oil (requested by Jake, 2d ago)
+
+Inventory items:
+- Butter (plenty), Cheddar Cheese (running low),
+  Greek Yogurt (almost out), Apples (plenty),
+  Bananas (running low), Pasta (plenty),
+  Tomato Sauce (almost out), Rice (plenty)
+
+---
+
+IMPORTANT NOTES:
+- Every button and interaction should do something —
+  no dead ends. If a feature isn't built yet, show a 
+  toast message: "Coming soon!"
+- Smooth animations on all screen transitions
+- The app should feel alive and polished, not like a wireframe
+- All screens should be scrollable if content is longer than 
+  the phone frame
+- README.md explaining the screen structure and how to 
+  navigate between them

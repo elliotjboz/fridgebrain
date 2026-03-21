@@ -1,0 +1,180 @@
+Update the FridgeBrain prototype with the following changes. 
+Read all existing files first, then make these specific updates.
+
+---
+
+CHANGE 1 — HOME SCREEN REDESIGN:
+Remove everything from the current home screen and replace with this:
+
+Top bar stays the same (FridgeBrain logo left, avatar right, 
+household selector below)
+
+Below the household selector — 3 large tappable action cards 
+stacked vertically, each taking roughly 1/4 of the screen height:
+
+Card 1: "🛒 I'm at the store"
+- Green background (#00C853)
+- White text, large and bold
+- Subtitle: "Let your household know you're shopping"
+- Tapping opens the store confirmation modal (same as before)
+
+Card 2: "📣 Notify Household"
+- Dark background (#1A1A1A)
+- White text, large and bold  
+- Subtitle: "Ask what everyone needs before you go"
+- Tapping opens a simple modal:
+  "Heading to the store soon — what does everyone need?"
+  Shows which store with a dropdown (fake stores)
+  "Send notification" green button
+  After sending: toast "Household notified!"
+
+Card 3: "➕ Add to My List"
+- Light gray background (#F5F5F5)
+- Dark text, large and bold
+- Subtitle: "Add something you need"
+- Tapping opens a simple add item modal:
+  Item name text input
+  Optional: notes input
+  Optional: photo upload placeholder
+  "Add to my list" green button
+
+These 3 cards are the ENTIRE home screen. Nothing else.
+Fast, clear, no clutter.
+
+---
+
+CHANGE 2 — TO-BUY LIST PAGE:
+This is now a separate screen accessible from hamburger menu
+called "Shopping List"
+
+Layout has TWO clear sections:
+
+SECTION 1 — "My List" (top half)
+- Your personal items only
+- Each item card: item name, optional note, 
+  small "×" to remove
+- Items are WHITE cards with a green left border accent
+- Large "+" floating button bottom right to add to YOUR list only
+- Empty state: "Your list is empty — add something!"
+
+SECTION 2 — "Household List" (bottom half, slightly grayed)
+- Combined list of what everyone else has added
+- Each item card shows: item name, colored avatar of who added it
+  with their name, time added
+- Each person's items are color coded by their avatar color:
+  Elliot = green, Jake = blue, Sarah = purple, Mom = orange
+- You can check off any item (you bought it for them)
+- You CANNOT edit or remove others' items
+- Read only except for checkboxes
+- Header says "What everyone needs"
+
+Toggle at the very top of the screen:
+"📋 Day-to-day" | "🛒 At the store"
+This flips the view:
+
+DAY-TO-DAY MODE (default):
+Shows both sections as described above
+Focus is on managing and adding to your list
+
+AT THE STORE MODE:
+Combines both lists into one streamlined view
+Your items shown first with green background
+Others' items below with their color coding
+Large checkboxes, easy to tap while holding phone
+Checked items fade out and move to bottom
+No editing, no adding — just checking things off
+A "Done shopping" button at bottom that:
+  Clears all checked items
+  Prompts "Take a photo of your receipt?"
+  Links to receipt scanner
+
+---
+
+CHANGE 3 — INVENTORY PAGE:
+Split into two clear sections with a toggle at top:
+
+Toggle: "Mine" | "Household"
+
+MINE view:
+- Grid of YOUR personal inventory items
+- Each card: colored placeholder square (no photo on card),
+  item name, quantity, status color (green/yellow/red)
+- Tapping a card opens item detail modal:
+  LARGE product photo placeholder at top
+  Item name, quantity, status
+  "Running low" button → adds to your list with confirmation
+  "Edit" and "Delete" buttons
+- "+" button to add new item to YOUR inventory
+
+HOUSEHOLD view:
+- Same grid layout
+- Shows everyone's items grouped by person
+- Each group has a colored header with person's name and avatar
+- You can VIEW others' items but NOT edit them
+- Tapping someone else's item shows read-only detail modal
+- No photo shown on cards — only in detail view (same as yours)
+- Makes it clear what is theirs vs yours
+
+---
+
+CHANGE 4 — FINANCES SECTION:
+Replace separate "Receipt Scanner" and "Cost Splitting" screens
+with ONE consolidated "Finances" section in hamburger menu
+
+Single page with TWO tabs at top:
+"📷 Receipt" | "💰 Split Costs"
+
+RECEIPT TAB (default):
+- Same receipt scanner UI as before
+- Big upload area, camera icon, "Take a photo of your receipt"
+- After fake processing: shows parsed items list
+- At bottom: "Add to inventory" button AND 
+  "Split with household?" button that switches to Split Costs tab
+  with the receipt data pre-loaded
+
+SPLIT COSTS TAB:
+- Shows current unsettled expenses
+- Each entry: store name, date, total, who paid
+- Expandable to show itemized list
+- Each household member's share shown clearly
+- "Settle via Venmo" and "Settle via Splitwise" buttons
+  (fake for now)
+- Running total at top: "You are owed $12.40" in green
+  or "You owe $8.20" in red
+- Settled history below with subtle divider
+
+---
+
+CHANGE 5 — HAMBURGER MENU UPDATE:
+Update menu items to reflect new structure:
+
+- Home (3 action cards)
+- Shopping List
+- Inventory  
+- Finances
+- Activity
+- Profile & Settings
+- Sign Out
+
+---
+
+KEEP THE SAME:
+- All mock data (Elliot, Jake, Sarah, Mom, Dad, Tom)
+- Phone frame container on desktop
+- Login/signup screen
+- Activity feed screen
+- Profile & settings screen
+- Overall color scheme and typography
+- All animations and transitions
+
+---
+
+IMPORTANT:
+- Read existing files first before making any changes
+- Preserve everything not mentioned in this brief
+- Every button must do something — no dead ends
+- At the store mode must feel noticeably different 
+  from day-to-day mode — more focused, less clutter
+- The 3 home screen cards should feel bold and tappable,
+  like big physical buttons
+- Mobile first, phone frame on desktop
