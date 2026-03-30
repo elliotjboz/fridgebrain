@@ -1,0 +1,69 @@
+Update the FridgeBrain prototype with the following changes.
+Read all existing files first, then make only these specific updates.
+
+---
+
+CHANGE 1 — ADD "PROBABLY NEED" HORIZONTAL SCROLL ROW:
+
+Add this row to the TOP of the Shopping List screen,
+above both the "My List" and "Household List" sections.
+
+DESIGN:
+- Section label above the row: "Probably Need" in gray 
+  small caps, 11px, letter-spacing 0.08em
+- Horizontal scrollable row of item cards
+- Each card: 90px wide, 110px tall, white background,
+  border-radius 12px, subtle shadow (0 2px 8px rgba(0,0,0,0.08))
+- Card content (top to bottom):
+  - Small colored emoji or placeholder square for product image
+    (32px, centered at top of card, slight padding)
+  - Item name in Inter 12px, centered, max 2 lines, 
+    truncate if longer
+  - Large "＋" button at bottom of card, full card width,
+    green (#00C853), 28px tall, rounded bottom corners only,
+    white "＋" symbol centered
+
+TWO VISUAL STATES — no other states, just these two:
+
+STATE 1 — Running Low (urgent):
+- Card has a 2px solid red border (#FF3B30)
+- No label, no text explanation — border only
+- The red border IS the signal
+
+STATE 2 — Usual Item (habitual):
+- Card has no border (just the subtle shadow)
+- Completely clean, no indicators at all
+
+FAKE DATA — show 6 cards in this order:
+1. Whole Milk — RED BORDER (running low)
+2. Eggs — no border (usual)
+3. Sourdough Bread — no border (usual)
+4. Butter — RED BORDER (running low)
+5. Olive Oil — no border (usual)
+6. Greek Yogurt — RED BORDER (running low)
+
+INTERACTION:
+- Tapping "＋" on any card adds it to My List instantly
+- Card does NOT disappear after adding — stays in row
+- "＋" button briefly turns to a "✓" for 1.5 seconds 
+  then returns to "＋" (confirms it was added)
+- Show a subtle toast at bottom: "Added to your list"
+- Row scrolls horizontally — snap scrolling between cards
+- Gap of 10px between cards, 16px padding left and right
+
+---
+
+CHANGE 2 — REMOVE CLOCK ICON ENTIRELY:
+If any clock icon or time-based indicator exists anywhere
+in the prototype, remove it completely.
+Only two states exist: red border or no border. Nothing else.
+
+---
+
+KEEP EVERYTHING ELSE EXACTLY THE SAME:
+- All existing screens unchanged
+- All mock data unchanged
+- All navigation unchanged
+- All colors, fonts, animations unchanged
+- The "Probably Need" row is purely additive —
+  it sits above existing content, nothing moves or changes below it

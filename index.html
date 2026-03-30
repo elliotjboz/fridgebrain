@@ -29,9 +29,9 @@
       </div>
     </div>
     <div class="menu-items">
-      <div class="menu-item active" data-screen="home"><span class="menu-item-icon">🏠</span> Home</div>
-      <div class="menu-item" data-screen="shopping"><span class="menu-item-icon">📋</span> Shopping List</div>
+      <div class="menu-item active" data-screen="shopping"><span class="menu-item-icon">🛒</span> Shopping List</div>
       <div class="menu-item" data-screen="inventory"><span class="menu-item-icon">📦</span> Inventory</div>
+      <div class="menu-item" data-screen="recipes"><span class="menu-item-icon">🍳</span> Recipes</div>
       <div class="menu-item" data-screen="finances"><span class="menu-item-icon">💰</span> Finances</div>
       <div class="menu-item" data-screen="activity"><span class="menu-item-icon">📋</span> Activity</div>
       <div class="menu-item" data-screen="profile"><span class="menu-item-icon">⚙️</span> Profile & Settings</div>
@@ -78,81 +78,6 @@
     </div>
   </div>
 
-  <!-- ==================== SCREEN: HOME (3 action cards) ==================== -->
-  <div class="screen" id="screen-home">
-    <div class="top-bar">
-      <button class="hamburger"><span></span><span></span><span></span></button>
-      <div class="top-bar-logo">Fridge<span>Brain</span></div>
-      <div class="avatar">EB</div>
-    </div>
-
-    <div class="household-selector" id="householdSelector">
-      🏠 <span id="householdName">The Apartment</span> <span style="font-size:12px">▼</span>
-    </div>
-    <div class="household-dropdown" id="householdDropdown">
-      <div class="household-option active" data-household="The Apartment">🏠 The Apartment</div>
-      <div class="household-option" data-household="Family Home">🏡 Family Home</div>
-    </div>
-
-    <div class="home-cards">
-      <div class="action-card action-card-green" id="cardGoingToStore">
-        <div class="action-card-icon">🛒</div>
-        <div class="action-card-text">
-          <div class="action-card-title">Going to the Store</div>
-          <div class="action-card-sub">Notify your household and see what's needed</div>
-        </div>
-      </div>
-
-      <div class="action-card action-card-dark" id="cardAddItem">
-        <div class="action-card-icon">➕</div>
-        <div class="action-card-text">
-          <div class="action-card-title">Add to My List</div>
-          <div class="action-card-sub">Add something you need</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Store Modal -->
-    <div class="modal-overlay" id="storeModal">
-      <div class="modal">
-        <h3>Notify your household you're shopping?</h3>
-        <p>Let everyone know you're picking up groceries</p>
-        <div class="modal-store">📍 Whole Foods</div>
-        <button class="btn btn-primary" id="storeConfirm">Yes, notify them</button>
-        <button class="btn btn-secondary" id="storeCancel">Cancel</button>
-      </div>
-    </div>
-
-    <!-- Add Item Modal -->
-    <div class="modal-overlay" id="addItemModal">
-      <div class="modal" style="text-align:left">
-        <h3 style="text-align:center">Add to My List</h3>
-        <div class="input-group" style="margin-top:16px">
-          <label>Item name</label>
-          <input type="text" id="addItemName" placeholder="e.g. Almond Milk">
-        </div>
-        <div class="input-group">
-          <label>Notes (optional)</label>
-          <input type="text" id="addItemNotes" placeholder="e.g. Unsweetened, Califia brand">
-        </div>
-        <div class="upload-area-mini" id="addItemPhoto">
-          📷 Add photo (optional)
-        </div>
-        <button class="btn btn-primary" id="addItemConfirm" style="margin-top:16px">Add to my list</button>
-        <button class="btn btn-secondary" id="addItemCancel">Cancel</button>
-      </div>
-    </div>
-
-    <!-- Item Added Confirmation Modal -->
-    <div class="modal-overlay" id="addedConfirmModal">
-      <div class="modal">
-        <h3>✅ Added!</h3>
-        <p id="addedItemText">Item added to your list</p>
-        <button class="btn btn-primary" id="addedGoToList">View full list</button>
-        <button class="btn btn-secondary" id="addedDone">Done</button>
-      </div>
-    </div>
-  </div>
 
   <!-- ==================== SCREEN: SHOPPING LIST ==================== -->
   <div class="screen" id="screen-shopping">
@@ -162,12 +87,64 @@
       <div class="avatar">EB</div>
     </div>
 
-    <div class="section-header">Shopping List</div>
+    <div class="household-wrap">
+      <div class="household-selector" id="householdSelector2">
+        🏠 <span class="householdNameSync">The Apartment</span> <span style="font-size:12px">▼</span>
+      </div>
+      <div class="household-dropdown" id="householdDropdown2">
+        <div class="household-option active" data-household="The Apartment">🏠 The Apartment</div>
+        <div class="household-option" data-household="Family Home">🏡 Family Home</div>
+      </div>
+    </div>
 
     <!-- Mode Toggle -->
     <div class="mode-toggle">
       <button class="mode-btn active" data-mode="daytoday">📋 Day-to-day</button>
       <button class="mode-btn" data-mode="atstore">🛒 At the store</button>
+    </div>
+
+    <!-- PROBABLY NEED ROW -->
+    <div class="probably-need-section" id="probablyNeedSection">
+      <div class="probably-need-label">Probably Need Soon <span class="pn-info-header" id="pnInfoBtn2">i</span></div>
+      <div class="probably-need-wrap">
+        <button class="pn-arrow pn-arrow-left" id="pnArrowLeft" style="display:none">‹</button>
+        <div class="probably-need-scroll" id="pnScroll">
+          <div class="probably-need-card urgent" data-pn-name="Whole Milk">
+            <span class="pn-name">Whole Milk</span>
+            <button class="pn-add">＋</button>
+          </div>
+          <div class="probably-need-card urgent" data-pn-name="Eggs (12ct)">
+            <span class="pn-name">Eggs</span>
+            <button class="pn-add">＋</button>
+          </div>
+          <div class="probably-need-card" data-pn-name="Bananas">
+            <span class="pn-name">Bananas</span>
+            <button class="pn-add">＋</button>
+          </div>
+          <div class="probably-need-card" data-pn-name="Chicken Breast">
+            <span class="pn-name">Chicken Breast</span>
+            <button class="pn-add">＋</button>
+          </div>
+          <div class="probably-need-card" data-pn-name="Paper Towels">
+            <span class="pn-name">Paper Towels</span>
+            <button class="pn-add">＋</button>
+          </div>
+          <div class="probably-need-card" data-pn-name="Butter">
+            <span class="pn-name">Butter</span>
+            <button class="pn-add">＋</button>
+          </div>
+        </div>
+        <button class="pn-arrow" id="pnArrowRight">›</button>
+      </div>
+
+      <!-- Priority Info Modal -->
+      <div class="modal-overlay" id="pnInfoModal">
+        <div class="modal">
+          <h3>Priority Item</h3>
+          <p>Items with a red highlight are things you're likely running low on, based on your household's purchase history. We recommend picking these up on your next trip.</p>
+          <button class="btn btn-secondary" id="pnInfoClose">Got it</button>
+        </div>
+      </div>
     </div>
 
     <!-- DAY-TO-DAY VIEW -->
@@ -235,55 +212,134 @@
           </div>
         </div>
       </div>
-      <div style="height:80px"></div>
+      
+    </div>
+
+    <!-- DAY-TO-DAY FAMILY VIEW -->
+    <div class="shopping-view" id="daytodayFamilyView" style="display:none">
+      <div class="list-section-header">Shopping List</div>
+      <div id="familyListItems">
+        <div class="my-list-card">
+          <div class="my-list-accent" style="background:#00C853"></div>
+          <div class="my-list-info">
+            <div class="my-list-name">Eggs (12ct)</div>
+            <div class="my-list-note">Free range preferred</div>
+          </div>
+          <button class="my-list-remove">×</button>
+        </div>
+        <div class="my-list-card">
+          <div class="my-list-accent" style="background:#00C853"></div>
+          <div class="my-list-info">
+            <div class="my-list-name">Whole Milk</div>
+            <div class="my-list-note"></div>
+          </div>
+          <button class="my-list-remove">×</button>
+        </div>
+        <div class="my-list-card">
+          <div class="my-list-accent" style="background:#00C853"></div>
+          <div class="my-list-info">
+            <div class="my-list-name">Sourdough Bread</div>
+            <div class="my-list-note">From the bakery section</div>
+          </div>
+          <button class="my-list-remove">×</button>
+        </div>
+        <div class="my-list-card">
+          <div class="my-list-accent" style="background:#00C853"></div>
+          <div class="my-list-info">
+            <div class="my-list-name">Olive Oil</div>
+            <div class="my-list-note">Extra virgin</div>
+          </div>
+          <button class="my-list-remove">×</button>
+        </div>
+        <div class="my-list-card">
+          <div class="my-list-accent" style="background:#00C853"></div>
+          <div class="my-list-info">
+            <div class="my-list-name">Greek Yogurt</div>
+            <div class="my-list-note"></div>
+          </div>
+          <button class="my-list-remove">×</button>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- AT THE STORE FAMILY VIEW -->
+    <div class="shopping-view" id="atstoreFamilyView" style="display:none">
+      <div class="store-scroll-area">
+        <div class="store-section-label store-yours">Shopping List</div>
+        <div id="storeFamilyItems">
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Eggs (12ct)</div>
+          </div>
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Whole Milk</div>
+          </div>
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Sourdough Bread</div>
+          </div>
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Olive Oil</div>
+          </div>
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Greek Yogurt</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px">
+          <button class="btn btn-primary" id="doneShoppingFamily">Done shopping</button>
+        </div>
+      </div>
+      
     </div>
 
     <!-- AT THE STORE VIEW -->
     <div class="shopping-view" id="atstoreView" style="display:none">
-      <div class="store-section-label store-yours">Your items</div>
-      <div id="storeMyItems">
-        <div class="store-item store-item-mine">
-          <div class="store-check"></div>
-          <div class="store-item-name">Eggs (12ct)</div>
+      <div class="store-scroll-area">
+        <div class="store-section-label store-yours">Your items</div>
+        <div id="storeMyItems">
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Eggs (12ct)</div>
+          </div>
+          <div class="store-item store-item-mine">
+            <div class="store-check"></div>
+            <div class="store-item-name">Oat Milk</div>
+          </div>
         </div>
-        <div class="store-item store-item-mine">
-          <div class="store-check"></div>
-          <div class="store-item-name">Oat Milk</div>
-        </div>
-        <div class="store-item store-item-mine">
-          <div class="store-check"></div>
-          <div class="store-item-name">Avocados</div>
-        </div>
-      </div>
 
-      <div class="store-section-label">Others' items</div>
-      <div id="storeHHItems">
-        <div class="store-item">
-          <div class="store-check"></div>
-          <div class="store-avatar" style="background:#42A5F5">SH</div>
-          <div class="store-item-name">Whole Milk</div>
+        <div class="store-section-label">Others' items</div>
+        <div id="storeHHItems">
+          <div class="store-item">
+            <div class="store-check"></div>
+            <div class="store-avatar" style="background:#42A5F5">SH</div>
+            <div class="store-item-name">Whole Milk</div>
+          </div>
+          <div class="store-item">
+            <div class="store-check"></div>
+            <div class="store-avatar" style="background:#AB47BC">NA</div>
+            <div class="store-item-name">Sourdough Bread</div>
+          </div>
+          <div class="store-item">
+            <div class="store-check"></div>
+            <div class="store-avatar" style="background:#42A5F5">SH</div>
+            <div class="store-item-name">Olive Oil</div>
+          </div>
+          <div class="store-item">
+            <div class="store-check"></div>
+            <div class="store-avatar" style="background:#FF9800">KA</div>
+            <div class="store-item-name">Greek Yogurt</div>
+          </div>
         </div>
-        <div class="store-item">
-          <div class="store-check"></div>
-          <div class="store-avatar" style="background:#AB47BC">NA</div>
-          <div class="store-item-name">Sourdough Bread</div>
-        </div>
-        <div class="store-item">
-          <div class="store-check"></div>
-          <div class="store-avatar" style="background:#42A5F5">SH</div>
-          <div class="store-item-name">Olive Oil</div>
-        </div>
-        <div class="store-item">
-          <div class="store-check"></div>
-          <div class="store-avatar" style="background:#FF9800">KA</div>
-          <div class="store-item-name">Greek Yogurt</div>
-        </div>
-      </div>
 
-      <div style="padding:20px">
-        <button class="btn btn-primary" id="doneShopping">Done shopping</button>
+        <div style="padding:16px 20px">
+          <button class="btn btn-primary" id="doneShopping">Done shopping</button>
+        </div>
       </div>
-      <div style="height:40px"></div>
+      
     </div>
 
     <!-- Done Shopping Modal -->
@@ -296,6 +352,63 @@
       </div>
     </div>
 
+    <!-- Add Item Modal -->
+    <div class="modal-overlay" id="addItemModal">
+      <div class="modal modal-tall" style="text-align:left">
+        <h3 style="text-align:center">Add to List</h3>
+        <div class="input-group" style="margin-top:16px">
+          <label>Search or type an item</label>
+          <input type="text" id="addItemName" placeholder="e.g. Milk, Eggs, Bread..." autocomplete="off">
+        </div>
+        <div class="autocomplete-results" id="autocompleteResults"></div>
+        <div id="selectedItemArea" style="display:none">
+          <div class="selected-item-chip" id="selectedChip"></div>
+          <div class="input-group" style="margin-top:12px">
+            <label>Notes (optional)</label>
+            <input type="text" id="addItemNotes" placeholder="e.g. Unsweetened, Califia brand">
+          </div>
+          <button class="btn btn-primary" id="addItemConfirm" style="margin-top:12px">Add to list</button>
+        </div>
+        <button class="btn btn-secondary" id="addItemCancel" style="margin-top:8px">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Item Added Confirmation Modal -->
+    <div class="modal-overlay" id="addedConfirmModal">
+      <div class="modal">
+        <h3>✅ Added!</h3>
+        <p id="addedItemText">Item added to your list</p>
+        <button class="btn btn-secondary" id="addedDone">Done</button>
+      </div>
+    </div>
+
+    <!-- Duplicate Item Modal -->
+    <div class="modal-overlay" id="duplicateModal">
+      <div class="modal">
+        <h3>⚠️ Duplicate item</h3>
+        <p id="duplicateText">This item is already on the list</p>
+        <button class="btn btn-primary" id="duplicateConfirm">Add anyway</button>
+        <button class="btn btn-secondary" id="duplicateCancel">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Notify Modal -->
+    <div class="modal-overlay" id="notifyModal">
+      <div class="modal">
+        <h3>Heading to the store soon</h3>
+        <p>Let everyone know what they need</p>
+        <select class="modal-select" id="notifyStore">
+          <option>📍 Whole Foods</option>
+          <option>📍 Trader Joe's</option>
+          <option>📍 Target</option>
+        </select>
+        <button class="btn btn-primary" id="notifyConfirm" style="margin-top:16px">Send notification</button>
+        <button class="btn btn-secondary" id="notifyCancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="fab-bar"></div>
+    <button class="fab-notify" id="notifyFab">📣</button>
     <button class="fab-small" id="addToMyListFab">+</button>
   </div>
 
@@ -309,8 +422,7 @@
 
     <div class="section-header">Inventory</div>
 
-    <!-- Mine / Household Toggle -->
-    <div class="mode-toggle">
+    <div class="mode-toggle" id="invModeToggle">
       <button class="mode-btn active" data-inv="mine">Mine</button>
       <button class="mode-btn" data-inv="household">Household</button>
     </div>
@@ -318,83 +430,74 @@
     <!-- MINE VIEW -->
     <div class="inv-view" id="invMineView">
       <div class="inventory-grid">
-        <div class="inventory-card" data-inv-item="butter">
-          <div class="inventory-card-img" style="background:#BBDEFB"></div>
-          <div class="inventory-card-name">Butter</div>
-          <div class="inventory-card-qty">1 lb</div>
-          <span class="status-badge status-green">Plenty</span>
-        </div>
-        <div class="inventory-card" data-inv-item="cheese">
-          <div class="inventory-card-img" style="background:#FFE082"></div>
-          <div class="inventory-card-name">Cheddar Cheese</div>
-          <div class="inventory-card-qty">8 oz block</div>
-          <span class="status-badge status-yellow">Running Low</span>
-        </div>
-        <div class="inventory-card" data-inv-item="yogurt">
-          <div class="inventory-card-img" style="background:#F5F5F5"></div>
-          <div class="inventory-card-name">Greek Yogurt</div>
-          <div class="inventory-card-qty">1 container</div>
-          <span class="status-badge status-red">Almost Out</span>
-        </div>
-        <div class="inventory-card" data-inv-item="pasta">
-          <div class="inventory-card-img" style="background:#FFE0B2"></div>
-          <div class="inventory-card-name">Pasta</div>
-          <div class="inventory-card-qty">2 boxes</div>
-          <span class="status-badge status-green">Plenty</span>
-        </div>
+        <div class="inventory-card" data-inv-item="butter"><div class="inventory-card-name">Butter</div><div class="inventory-card-qty">1 lb</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="cheese"><div class="inventory-card-name">Cheddar Cheese</div><div class="inventory-card-qty">8 oz</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="yogurt"><div class="inventory-card-name">Greek Yogurt</div><div class="inventory-card-qty">1 container</div><span class="status-badge status-red">Almost Out</span></div>
+        <div class="inventory-card" data-inv-item="pasta"><div class="inventory-card-name">Pasta</div><div class="inventory-card-qty">2 boxes</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="eggs-mine"><div class="inventory-card-name">Eggs (12ct)</div><div class="inventory-card-qty">12 count</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="oliveoil"><div class="inventory-card-name">Olive Oil</div><div class="inventory-card-qty">1 bottle</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="chicken"><div class="inventory-card-name">Chicken Breast</div><div class="inventory-card-qty">1 lb</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="spinach"><div class="inventory-card-name">Spinach</div><div class="inventory-card-qty">1 bag</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="bread-mine"><div class="inventory-card-name">Sourdough Bread</div><div class="inventory-card-qty">1 loaf</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="salt-mine"><div class="inventory-card-name">Salt</div><div class="inventory-card-qty">1 container</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="rice-mine"><div class="inventory-card-name">Rice</div><div class="inventory-card-qty">5 lb bag</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="bananas-mine"><div class="inventory-card-name">Bananas</div><div class="inventory-card-qty">4 count</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="garlic-mine"><div class="inventory-card-name">Garlic</div><div class="inventory-card-qty">1 head</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="onions-mine"><div class="inventory-card-name">Onions</div><div class="inventory-card-qty">3 count</div><span class="status-badge status-green">Plenty</span></div>
       </div>
     </div>
 
     <!-- HOUSEHOLD VIEW -->
     <div class="inv-view" id="invHouseholdView" style="display:none">
       <div class="inv-person-group">
-        <div class="inv-person-header" style="border-left-color:#42A5F5">
-          <div class="hh-avatar" style="background:#42A5F5">SH</div>
-          <span>Shura's Items</span>
-        </div>
+        <div class="inv-person-header" style="border-left-color:#42A5F5"><div class="hh-avatar" style="background:#42A5F5">SH</div><span>Shura's Items</span></div>
         <div class="inventory-grid">
-          <div class="inventory-card" data-inv-item="apples-j" data-readonly="true">
-            <div class="inventory-card-img" style="background:#C8E6C9"></div>
-            <div class="inventory-card-name">Apples</div>
-            <div class="inventory-card-qty">6 count</div>
-            <span class="status-badge status-green">Plenty</span>
-          </div>
-          <div class="inventory-card" data-inv-item="bananas-j" data-readonly="true">
-            <div class="inventory-card-img" style="background:#FFF9C4"></div>
-            <div class="inventory-card-name">Bananas</div>
-            <div class="inventory-card-qty">4 count</div>
-            <span class="status-badge status-yellow">Running Low</span>
-          </div>
+          <div class="inventory-card" data-inv-item="apples-j" data-readonly="true"><div class="inventory-card-name">Apples</div><div class="inventory-card-qty">6 count</div><span class="status-badge status-green">Plenty</span></div>
+          <div class="inventory-card" data-inv-item="bananas-j" data-readonly="true"><div class="inventory-card-name">Bananas</div><div class="inventory-card-qty">4 count</div><span class="status-badge status-yellow">Running Low</span></div>
+          <div class="inventory-card" data-inv-item="coffee-j" data-readonly="true"><div class="inventory-card-name">Coffee</div><div class="inventory-card-qty">1 bag</div><span class="status-badge status-green">Plenty</span></div>
+          <div class="inventory-card" data-inv-item="milk-j" data-readonly="true"><div class="inventory-card-name">Whole Milk</div><div class="inventory-card-qty">1 gallon</div><span class="status-badge status-yellow">Running Low</span></div>
         </div>
       </div>
-
       <div class="inv-person-group">
-        <div class="inv-person-header" style="border-left-color:#AB47BC">
-          <div class="hh-avatar" style="background:#AB47BC">NA</div>
-          <span>Nadia's Items</span>
-        </div>
+        <div class="inv-person-header" style="border-left-color:#AB47BC"><div class="hh-avatar" style="background:#AB47BC">NA</div><span>Nadia's Items</span></div>
         <div class="inventory-grid">
-          <div class="inventory-card" data-inv-item="rice-s" data-readonly="true">
-            <div class="inventory-card-img" style="background:#F5F5F5"></div>
-            <div class="inventory-card-name">Rice</div>
-            <div class="inventory-card-qty">5 lb bag</div>
-            <span class="status-badge status-green">Plenty</span>
-          </div>
-          <div class="inventory-card" data-inv-item="sauce-s" data-readonly="true">
-            <div class="inventory-card-img" style="background:#FFCDD2"></div>
-            <div class="inventory-card-name">Tomato Sauce</div>
-            <div class="inventory-card-qty">1 jar</div>
-            <span class="status-badge status-red">Almost Out</span>
-          </div>
+          <div class="inventory-card" data-inv-item="rice-s" data-readonly="true"><div class="inventory-card-name">Rice</div><div class="inventory-card-qty">5 lb bag</div><span class="status-badge status-green">Plenty</span></div>
+          <div class="inventory-card" data-inv-item="sauce-s" data-readonly="true"><div class="inventory-card-name">Tomato Sauce</div><div class="inventory-card-qty">1 jar</div><span class="status-badge status-red">Almost Out</span></div>
+          <div class="inventory-card" data-inv-item="hummus-s" data-readonly="true"><div class="inventory-card-name">Hummus</div><div class="inventory-card-qty">1 tub</div><span class="status-badge status-green">Plenty</span></div>
+          <div class="inventory-card" data-inv-item="broth-s" data-readonly="true"><div class="inventory-card-name">Chicken Broth</div><div class="inventory-card-qty">2 cartons</div><span class="status-badge status-green">Plenty</span></div>
         </div>
+      </div>
+      <div class="inv-person-group">
+        <div class="inv-person-header" style="border-left-color:#FF9800"><div class="hh-avatar" style="background:#FF9800">KA</div><span>Kalman's Items</span></div>
+        <div class="inventory-grid">
+          <div class="inventory-card" data-inv-item="oranges-k" data-readonly="true"><div class="inventory-card-name">Oranges</div><div class="inventory-card-qty">6 count</div><span class="status-badge status-green">Plenty</span></div>
+          <div class="inventory-card" data-inv-item="peanutbutter-k" data-readonly="true"><div class="inventory-card-name">Peanut Butter</div><div class="inventory-card-qty">1 jar</div><span class="status-badge status-yellow">Running Low</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAMILY INVENTORY VIEW -->
+    <div class="inv-view" id="invFamilyView" style="display:none">
+      <div class="inventory-grid">
+        <div class="inventory-card" data-inv-item="butter"><div class="inventory-card-name">Butter</div><div class="inventory-card-qty">1 lb</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="cheese"><div class="inventory-card-name">Cheddar Cheese</div><div class="inventory-card-qty">8 oz</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="yogurt"><div class="inventory-card-name">Greek Yogurt</div><div class="inventory-card-qty">1 container</div><span class="status-badge status-red">Almost Out</span></div>
+        <div class="inventory-card" data-inv-item="pasta"><div class="inventory-card-name">Pasta</div><div class="inventory-card-qty">2 boxes</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="eggs-mine"><div class="inventory-card-name">Eggs (12ct)</div><div class="inventory-card-qty">12 count</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="oliveoil"><div class="inventory-card-name">Olive Oil</div><div class="inventory-card-qty">1 bottle</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="chicken"><div class="inventory-card-name">Chicken Breast</div><div class="inventory-card-qty">1 lb</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="spinach"><div class="inventory-card-name">Spinach</div><div class="inventory-card-qty">1 bag</div><span class="status-badge status-yellow">Running Low</span></div>
+        <div class="inventory-card" data-inv-item="apples-j"><div class="inventory-card-name">Apples</div><div class="inventory-card-qty">6 count</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="rice-s"><div class="inventory-card-name">Rice</div><div class="inventory-card-qty">5 lb bag</div><span class="status-badge status-green">Plenty</span></div>
+        <div class="inventory-card" data-inv-item="sauce-s"><div class="inventory-card-name">Tomato Sauce</div><div class="inventory-card-qty">1 jar</div><span class="status-badge status-red">Almost Out</span></div>
+        <div class="inventory-card" data-inv-item="coffee-j"><div class="inventory-card-name">Coffee</div><div class="inventory-card-qty">1 bag</div><span class="status-badge status-green">Plenty</span></div>
       </div>
     </div>
 
     <!-- Inventory Detail Modal -->
     <div class="modal-overlay" id="invDetailModal">
       <div class="modal" style="text-align:left">
-        <div class="inv-detail-photo"></div>
-        <h3 id="invDetailName" style="margin-top:12px"></h3>
+        <h3 id="invDetailName"></h3>
         <div id="invDetailQty" style="font-size:14px;color:#757575;margin:4px 0 8px"></div>
         <div id="invDetailStatus"></div>
         <div id="invDetailActions" style="margin-top:16px">
@@ -409,7 +512,68 @@
       </div>
     </div>
 
+    <!-- Add to Inventory Modal -->
+    <div class="modal-overlay" id="addInvModal">
+      <div class="modal modal-tall" style="text-align:left">
+        <h3 style="text-align:center">Add to Inventory</h3>
+        <div class="input-group" style="margin-top:16px">
+          <label>Search or type an item</label>
+          <input type="text" id="addInvSearch" placeholder="e.g. Milk, Eggs, Bread..." autocomplete="off">
+        </div>
+        <div class="autocomplete-results" id="invAutocomplete"></div>
+        <div id="invSelectedArea" style="display:none">
+          <div class="selected-item-chip" id="invSelectedChip"></div>
+          <div class="input-group" style="margin-top:12px">
+            <label>Quantity</label>
+            <input type="text" id="addInvQty" placeholder="e.g. 1 lb, 2 boxes">
+          </div>
+          <div style="margin-top:12px">
+            <label style="font-size:13px;font-weight:500;color:#757575">Status</label>
+            <div class="status-select">
+              <button class="status-opt active" data-status="plenty">Plenty</button>
+              <button class="status-opt" data-status="low">Running Low</button>
+              <button class="status-opt" data-status="out">Almost Out</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="addInvConfirm" style="margin-top:16px">Add to inventory</button>
+        </div>
+        <button class="btn btn-secondary" id="addInvCancel" style="margin-top:8px">Cancel</button>
+      </div>
+    </div>
+
+    <div class="fab-bar"></div>
     <button class="fab-small" id="addInventoryBtn">+</button>
+  </div>
+
+  <!-- ==================== SCREEN: RECIPES ==================== -->
+  <div class="screen" id="screen-recipes">
+    <div class="top-bar">
+      <button class="hamburger"><span></span><span></span><span></span></button>
+      <div class="top-bar-logo">Fridge<span>Brain</span></div>
+      <div class="avatar">EB</div>
+    </div>
+
+    <div class="section-header">Recipes</div>
+    <p style="padding:0 20px 12px;font-size:13px;color:#757575">Based on what's in your inventory</p>
+
+    <div class="filter-tabs" id="recipeFilters">
+      <button class="filter-tab active" data-rcat="all">All</button>
+      <button class="filter-tab" data-rcat="breakfast">🍳 Breakfast</button>
+      <button class="filter-tab" data-rcat="lunch">🥗 Lunch</button>
+      <button class="filter-tab" data-rcat="dinner">🍽️ Dinner</button>
+      <button class="filter-tab" data-rcat="snacks">🍿 Snacks</button>
+    </div>
+
+    <div id="recipeList" class="recipe-list"></div>
+
+    <!-- Recipe Detail Modal -->
+    <div class="modal-overlay" id="recipeDetailModal">
+      <div class="modal modal-tall" style="text-align:left">
+        <div id="recipeDetailContent"></div>
+        <button class="btn btn-primary" id="recipeAddMissing" style="margin-top:16px">Add missing items to list</button>
+        <button class="btn btn-secondary" id="recipeDetailClose" style="margin-top:8px">Close</button>
+      </div>
+    </div>
   </div>
 
   <!-- ==================== SCREEN: FINANCES ==================== -->
@@ -535,14 +699,14 @@
       <button class="filter-tab">Shura</button>
       <button class="filter-tab">Nadia</button>
     </div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> bought groceries at Whole Foods</div><div class="activity-time">2h ago</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> added Oat Milk to the list</div><div class="activity-time">4h ago</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> marked Eggs as running low</div><div class="activity-time">6h ago</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> is at Trader Joe's — need anything?</div><div class="activity-time">Yesterday</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> settled $28.50 with the household</div><div class="activity-time">2d ago</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> scanned a receipt from Trader Joe's</div><div class="activity-time">3d ago</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> added Olive Oil to the list</div><div class="activity-time">3d ago</div></div></div>
-    <div class="activity-item"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> marked Tomato Sauce as almost out</div><div class="activity-time">4d ago</div></div></div>
+    <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> bought groceries at Whole Foods</div><div class="activity-time">2h ago</div></div></div>
+    <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> added Oat Milk to the list</div><div class="activity-time">4h ago</div></div></div>
+    <div class="activity-item" data-person="Elliot"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> marked Eggs as running low</div><div class="activity-time">6h ago</div></div></div>
+    <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> is at Trader Joe's — need anything?</div><div class="activity-time">Yesterday</div></div></div>
+    <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> settled $28.50 with the household</div><div class="activity-time">2d ago</div></div></div>
+    <div class="activity-item" data-person="Elliot"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> scanned a receipt from Trader Joe's</div><div class="activity-time">3d ago</div></div></div>
+    <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> added Olive Oil to the list</div><div class="activity-time">3d ago</div></div></div>
+    <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> marked Tomato Sauce as almost out</div><div class="activity-time">4d ago</div></div></div>
   </div>
 
   <!-- ==================== SCREEN: PROFILE ==================== -->
@@ -562,6 +726,20 @@
         <div class="profile-section-title">Your Households</div>
         <div class="profile-card"><div><div class="profile-card-name">🏠 The Apartment</div><div class="profile-card-meta">5 members</div></div></div>
         <div class="profile-card"><div><div class="profile-card-name">🏡 Family Home</div><div class="profile-card-meta">4 members</div></div></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-section-title">Household Mode</div>
+        <div class="toggle-row">
+          <div>
+            <span class="toggle-label">Family mode</span>
+            <div class="info-tooltip" id="familyModeInfo">ⓘ</div>
+          </div>
+          <div class="toggle-switch" id="familyModeToggle"></div>
+        </div>
+        <div class="family-mode-desc" id="familyModeDesc">When enabled, the shopping list is shared — no separation between individual members' items. Best for families where groceries are communal.</div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-section-title">Your Households</div>
         <div class="profile-buttons">
           <button class="btn btn-outline" onclick="showToast('Coming soon!')">Create new household</button>
           <button class="btn btn-secondary" onclick="showToast('Coming soon!')">Join a household</button>
@@ -584,6 +762,7 @@
 
 </div>
 
+<script src="groceryDB.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
