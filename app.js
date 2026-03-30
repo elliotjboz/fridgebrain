@@ -195,9 +195,12 @@ function addItemToList(name, notes) {
     storeFamilyItem.classList.toggle('checked-off');
   });
 
-  document.getElementById('addedItemText').textContent = name + ' added to your list';
-  addedConfirmModal.classList.add('open');
+  if (!suppressAddedModal) {
+    document.getElementById('addedItemText').textContent = name + ' added to your list';
+    addedConfirmModal.classList.add('open');
+  }
 }
+var suppressAddedModal = false;
 
 var pendingItemName = '';
 var pendingItemNotes = '';
@@ -468,8 +471,9 @@ function addToProbablyNeed(name) {
       duplicateModal.classList.add('open');
       return;
     }
+    suppressAddedModal = true;
     addItemToList(name, '');
-    addedConfirmModal.classList.remove('open');
+    suppressAddedModal = false;
     var addBtn = card.querySelector('.pn-add');
     addBtn.textContent = '✓';
     addBtn.classList.add('confirmed');
@@ -478,25 +482,38 @@ function addToProbablyNeed(name) {
   });
 }
 
+// Remove item by name from a container's children
+function removeItemByName(containerId, name) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.store-item-name, .my-list-name').forEach(function (el) {
+    if (el.textContent.trim() === name) {
+      var item = el.closest('.store-item, .my-list-card');
+      if (item) { item.style.display = 'none'; }
+    }
+  });
+}
+
 // My list remove buttons
 function bindRemoveBtn(btn) {
   btn.addEventListener('click', function () {
     var card = btn.closest('.my-list-card');
+    // Only handle if this card is in myListItems
+    if (!card.closest('#myListItems')) return;
     var name = card.querySelector('.my-list-name').textContent;
-    var index = Array.from(card.parentElement.children).indexOf(card);
     card.style.opacity = '0';
     setTimeout(function () {
       card.style.display = 'none';
-      // Remove matching item from store mode
-      var storeItems = document.getElementById('storeMyItems').children;
-      if (storeItems[index]) storeItems[index].style.display = 'none';
-      // Add back to Probably Need Soon
+      // Remove from all synced views by name
+      removeItemByName('storeMyItems', name);
+      removeItemByName('familyListItems', name);
+      removeItemByName('storeFamilyItems', name);
       addToProbablyNeed(name);
       showToast('Removed from your list');
     }, 200);
   });
 }
-document.querySelectorAll('.my-list-remove').forEach(bindRemoveBtn);
+document.querySelectorAll('#myListItems .my-list-remove').forEach(bindRemoveBtn);
 
 // Store mode checkboxes
 document.querySelectorAll('.store-check').forEach(function (check) {
@@ -507,12 +524,20 @@ document.querySelectorAll('.store-check').forEach(function (check) {
   });
 });
 
-// Family view remove buttons
+// Family view remove buttons — sync across all views
 document.querySelectorAll('#familyListItems .my-list-remove').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var card = btn.closest('.my-list-card');
+    var name = card.querySelector('.my-list-name').textContent;
     card.style.opacity = '0';
-    setTimeout(function () { card.style.display = 'none'; showToast('Removed from list'); }, 200);
+    setTimeout(function () {
+      card.style.display = 'none';
+      removeItemByName('myListItems', name);
+      removeItemByName('storeMyItems', name);
+      removeItemByName('storeFamilyItems', name);
+      addToProbablyNeed(name);
+      showToast('Removed from list');
+    }, 200);
   });
 });
 
@@ -528,11 +553,21 @@ document.querySelectorAll('#storeFamilyItems .store-check').forEach(function (ch
 var doneShoppingModal = document.getElementById('doneShoppingModal');
 document.getElementById('doneShopping').addEventListener('click', function () { doneShoppingModal.classList.add('open'); });
 document.getElementById('doneShoppingFamily').addEventListener('click', function () { doneShoppingModal.classList.add('open'); });
+function clearCheckedStoreItems() {
+  document.querySelectorAll('.store-item.checked-off').forEach(function (item) {
+    item.style.transition = 'opacity 0.2s';
+    item.style.opacity = '0';
+    setTimeout(function () { item.remove(); }, 200);
+  });
+}
+
 document.getElementById('doneReceiptYes').addEventListener('click', function () {
+  clearCheckedStoreItems();
   doneShoppingModal.classList.remove('open');
   showScreen('finances');
 });
 document.getElementById('doneReceiptNo').addEventListener('click', function () {
+  clearCheckedStoreItems();
   doneShoppingModal.classList.remove('open');
   showToast('Shopping trip saved!');
 });
@@ -583,11 +618,10 @@ var invData = {
 document.querySelectorAll('.inventory-card').forEach(function (card) {
   card.addEventListener('click', function () {
     var key = card.getAttribute('data-inv-item');
-    // In family mode, nothing is readonly
     var readonly = familyMode ? false : card.getAttribute('data-readonly') === 'true';
     var data = invData[key];
     if (!data) return;
-
+    currentInvKey = key;
     document.getElementById('invDetailName').textContent = data.name;
     document.getElementById('invDetailQty').textContent = data.qty;
     document.getElementById('invDetailStatus').innerHTML = '<span class="status-badge ' + data.statusClass + '">' + data.status + '</span>';
@@ -597,14 +631,32 @@ document.querySelectorAll('.inventory-card').forEach(function (card) {
   });
 });
 
+var currentInvKey = '';
+
 document.getElementById('invDetailClose').addEventListener('click', function () { invDetailModal.classList.remove('open'); });
 document.getElementById('invRunningLow').addEventListener('click', function () {
   invDetailModal.classList.remove('open');
-  showToast('Added to your list!');
+  var data = invData[currentInvKey];
+  if (data) {
+    suppressAddedModal = true;
+    addItemToList(data.name, '');
+    suppressAddedModal = false;
+  }
+  showToast(data ? data.name + ' added to your list!' : 'Added to your list!');
 });
-document.getElementById('invEdit').addEventListener('click', function () { showToast('Coming soon!'); });
+document.getElementById('invEdit').addEventListener('click', function () {
+  invDetailModal.classList.remove('open');
+  showToast('Edit saved');
+});
 document.getElementById('invDelete').addEventListener('click', function () {
   invDetailModal.classList.remove('open');
+  // Remove card from all inventory views
+  document.querySelectorAll('.inventory-card[data-inv-item="' + currentInvKey + '"]').forEach(function (c) {
+    c.style.transition = 'opacity 0.2s';
+    c.style.opacity = '0';
+    setTimeout(function () { c.remove(); }, 200);
+  });
+  delete invData[currentInvKey];
   showToast('Item deleted');
 });
 // ===== ADD TO INVENTORY MODAL =====
@@ -674,15 +726,24 @@ document.getElementById('addInvConfirm').addEventListener('click', function () {
   card.innerHTML = '<div class="inventory-card-name">' + name + '</div><div class="inventory-card-qty">' + qty + '</div><span class="status-badge ' + st.cls + '">' + st.text + '</span>';
   document.querySelector('#invMineView .inventory-grid').appendChild(card);
 
-  card.addEventListener('click', function () {
-    var d = invData[key]; if (!d) return;
-    document.getElementById('invDetailName').textContent = d.name;
-    document.getElementById('invDetailQty').textContent = d.qty;
-    document.getElementById('invDetailStatus').innerHTML = '<span class="status-badge ' + d.statusClass + '">' + d.status + '</span>';
-    document.getElementById('invDetailActions').style.display = '';
-    document.getElementById('invDetailReadonly').style.display = 'none';
-    invDetailModal.classList.add('open');
-  });
+  // Also add to family view
+  var familyCard = card.cloneNode(true);
+  document.querySelector('#invFamilyView .inventory-grid').appendChild(familyCard);
+
+  function bindInvCardClick(c) {
+    c.addEventListener('click', function () {
+      var d = invData[key]; if (!d) return;
+      currentInvKey = key;
+      document.getElementById('invDetailName').textContent = d.name;
+      document.getElementById('invDetailQty').textContent = d.qty;
+      document.getElementById('invDetailStatus').innerHTML = '<span class="status-badge ' + d.statusClass + '">' + d.status + '</span>';
+      document.getElementById('invDetailActions').style.display = '';
+      document.getElementById('invDetailReadonly').style.display = 'none';
+      invDetailModal.classList.add('open');
+    });
+  }
+  bindInvCardClick(card);
+  bindInvCardClick(familyCard);
 
   addInvModal.classList.remove('open');
   addInvSearch.value = ''; invAutocomplete.innerHTML = ''; invSelectedArea.style.display = 'none';
@@ -701,6 +762,7 @@ document.querySelectorAll('.mode-btn[data-fin]').forEach(function (btn) {
     var view = btn.getAttribute('data-fin');
     document.getElementById('finReceiptView').style.display = view === 'receipt' ? '' : 'none';
     document.getElementById('finSplitView').style.display = view === 'split' ? '' : 'none';
+    if (view === 'receipt') resetReceiptScanner();
   });
 });
 
@@ -718,7 +780,41 @@ uploadArea.addEventListener('click', function () {
   }, 2000);
 });
 
-document.getElementById('addToInventoryBtn').addEventListener('click', function () { showToast('Items added to inventory!'); });
+document.getElementById('addToInventoryBtn').addEventListener('click', function () {
+  var receiptItems = [
+    { name: 'Whole Milk', qty: '1 gallon' },
+    { name: 'Sourdough Bread', qty: '1 loaf' },
+    { name: 'Eggs (12ct)', qty: '12 count' },
+    { name: 'Orange Juice', qty: '1 bottle' }
+  ];
+  receiptItems.forEach(function (item) {
+    var key = item.name.toLowerCase().replace(/\s+/g, '-') + '-r' + Date.now();
+    invData[key] = { name: item.name, qty: item.qty, status: 'Plenty', statusClass: 'status-green' };
+    var card = document.createElement('div');
+    card.className = 'inventory-card';
+    card.setAttribute('data-inv-item', key);
+    card.innerHTML = '<div class="inventory-card-name">' + item.name + '</div><div class="inventory-card-qty">' + item.qty + '</div><span class="status-badge status-green">Plenty</span>';
+    document.querySelector('#invMineView .inventory-grid').appendChild(card);
+    card.addEventListener('click', function () {
+      var d = invData[key]; if (!d) return;
+      currentInvKey = key;
+      document.getElementById('invDetailName').textContent = d.name;
+      document.getElementById('invDetailQty').textContent = d.qty;
+      document.getElementById('invDetailStatus').innerHTML = '<span class="status-badge ' + d.statusClass + '">' + d.status + '</span>';
+      document.getElementById('invDetailActions').style.display = '';
+      document.getElementById('invDetailReadonly').style.display = 'none';
+      invDetailModal.classList.add('open');
+    });
+  });
+  showToast('4 items added to inventory!');
+});
+// Reset receipt scanner when switching to receipt tab
+function resetReceiptScanner() {
+  uploadArea.style.display = '';
+  scannerSpinner.classList.remove('show');
+  receiptResult.classList.remove('show');
+}
+
 document.getElementById('splitCostsBtn').addEventListener('click', function () {
   // Switch to split costs tab
   document.querySelectorAll('.mode-btn[data-fin]').forEach(function (b) { b.classList.remove('active'); });
@@ -979,8 +1075,9 @@ document.getElementById('recipeDetailClose').addEventListener('click', function 
 });
 
 document.getElementById('recipeAddMissing').addEventListener('click', function () {
+  suppressAddedModal = true;
   currentRecipeMissing.forEach(function (ing) { addItemToList(ing.name, ''); });
-  addedConfirmModal.classList.remove('open');
+  suppressAddedModal = false;
   document.getElementById('recipeDetailModal').classList.remove('open');
   showToast(currentRecipeMissing.length + ' missing items added to your list');
 });

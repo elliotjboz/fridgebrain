@@ -1,0 +1,23 @@
+The app currently has a fixed phone frame designed 
+for desktop preview. When opened on a real mobile 
+browser it doesn't fit properly — content is too 
+tall and requires excessive scrolling.
+
+Please make these changes:
+
+1. REMOVE the phone frame wrapper entirely
+2. Make the app fully responsive for real mobile screens
+3. Each screen should fit within the viewport height 
+   of a real phone (use 100dvh)
+4. Navigation and top bar should be fixed/sticky 
+   so they don't scroll away
+5. Content area between top bar and bottom nav 
+   should be scrollable independently
+6. The hamburger menu and all UI should be sized 
+   for real finger taps (minimum 44px tap targets)
+7. Test mentally for iPhone 14 screen size (390x844px)
+8. On desktop, center the content at max-width 480px 
+   so it still looks like a mobile app on big screens
+
+Keep all existing features, screens, and functionality 
+exactly the same — this is purely a layout fix.
