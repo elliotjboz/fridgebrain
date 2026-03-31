@@ -60,7 +60,7 @@ body { background: #E0E0E0; font-family: 'Inter', sans-serif; display: flex; jus
 .mode-btn.active { background: #FFFFFF; color: #1A1A1A; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
 /* ===== SHOPPING LIST — DAY-TO-DAY ===== */
-.shopping-view { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+.shopping-view { flex: 1; overflow-y: auto; padding-bottom: 110px; }
 .shopping-view::-webkit-scrollbar { width: 4px; }
 .shopping-view::-webkit-scrollbar-track { background: transparent; }
 .shopping-view::-webkit-scrollbar-thumb { background: #D0D0D0; border-radius: 4px; }
@@ -71,7 +71,7 @@ body { background: #E0E0E0; font-family: 'Inter', sans-serif; display: flex; jus
 /* My List Cards */
 .my-list-card { display: flex; align-items: center; margin: 0 20px 8px; background: #FFFFFF; border: 1px solid #F5F5F5; border-radius: 12px; overflow: hidden; }
 .my-list-accent { width: 4px; align-self: stretch; background: #00C853; flex-shrink: 0; }
-.my-list-info { flex: 1; padding: 14px 16px; }
+.my-list-info { flex: 1; padding: 14px 16px; cursor: pointer; }
 .my-list-name { font-size: 15px; font-weight: 500; }
 .my-list-note { font-size: 12px; color: #757575; margin-top: 2px; }
 .my-list-remove { background: none; border: none; font-size: 20px; color: #BDBDBD; cursor: pointer; padding: 14px; font-family: 'Inter', sans-serif; transition: color 0.2s; }
@@ -201,6 +201,33 @@ body { background: #E0E0E0; font-family: 'Inter', sans-serif; display: flex; jus
 .login-switch { text-align: center; font-size: 14px; color: #757575; }
 .login-switch a { color: #00C853; font-weight: 600; cursor: pointer; text-decoration: none; }
 
+/* Google sign-in button */
+.btn-google { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px; border: 1.5px solid #E0E0E0; border-radius: 12px; background: #FFFFFF; font-size: 16px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s, box-shadow 0.15s; }
+.btn-google:hover { background: #FAFAFA; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.login-terms { text-align: center; font-size: 11px; color: #BDBDBD; margin-top: 24px; line-height: 1.5; padding: 0 20px; }
+
+/* Onboarding */
+.onboarding-cards { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-bottom: 24px; }
+.onboarding-card { padding: 20px; border: 1.5px solid #E0E0E0; border-radius: 16px; cursor: pointer; transition: border-color 0.2s, background 0.2s; display: flex; align-items: center; gap: 16px; }
+.onboarding-card:hover { border-color: #00C853; background: #F9FFF9; }
+.onboarding-card-icon { font-size: 28px; flex-shrink: 0; }
+.onboarding-card-title { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.onboarding-card-sub { font-size: 13px; color: #757575; line-height: 1.4; }
+.invite-code { display: inline-block; padding: 12px 24px; background: #F5F5F5; border-radius: 12px; font-size: 22px; font-weight: 700; letter-spacing: 4px; font-family: 'Inter', monospace; color: #1A1A1A; }
+
+/* Profile member list */
+.member-list { margin-top: 12px; }
+.member-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #F5F5F5; }
+.member-info { flex: 1; display: flex; align-items: center; gap: 8px; }
+.member-name { font-size: 15px; font-weight: 500; }
+.member-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+.admin-badge { background: #E8F5E9; color: #2E7D32; }
+.member-remove { background: none; border: none; color: #BDBDBD; font-size: 16px; cursor: pointer; padding: 8px; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
+.member-remove:hover { color: #FF3B30; }
+.invite-code-row { display: flex; align-items: center; gap: 12px; }
+.btn-copy { background: none; border: 1px solid #E0E0E0; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-family: 'Inter', sans-serif; cursor: pointer; transition: border-color 0.2s; }
+.btn-copy:hover { border-color: #00C853; }
+
 /* ===== HAMBURGER MENU ===== */
 .menu-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; }
 .menu-overlay.open { display: block; }
@@ -263,7 +290,13 @@ body { background: #E0E0E0; font-family: 'Inter', sans-serif; display: flex; jus
 .history-item { padding: 10px 0; border-bottom: 1px solid #F5F5F5; font-size: 14px; color: #757575; display: flex; justify-content: space-between; }
 
 /* ===== ACTIVITY FEED ===== */
-.activity-filters { display: flex; gap: 8px; padding: 0 20px 16px; overflow-x: auto; }
+#screen-activity { overflow: hidden; }
+.activity-filters { display: flex; gap: 8px; padding: 0 20px 16px; overflow-x: auto; position: relative; z-index: 5; }
+.activity-list { flex: 1; overflow-y: auto; min-height: 0; }
+.activity-list::-webkit-scrollbar { width: 4px; }
+.activity-list::-webkit-scrollbar-track { background: transparent; }
+.activity-list::-webkit-scrollbar-thumb { background: #D0D0D0; border-radius: 4px; }
+.activity-list { scrollbar-width: thin; scrollbar-color: #D0D0D0 transparent; }
 .activity-filters::-webkit-scrollbar { display: none; }
 .activity-item { display: flex; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #F5F5F5; }
 .activity-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
@@ -293,6 +326,26 @@ body { background: #E0E0E0; font-family: 'Inter', sans-serif; display: flex; jus
 .profile-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 
 .fin-view { flex: 1; }
+
+/* Coming Soon */
+.coming-soon-list { padding: 0 20px; }
+.cs-card { display: flex; align-items: flex-start; gap: 14px; padding: 16px; background: #F5F5F5; border-radius: 12px; margin-bottom: 10px; }
+.cs-icon { font-size: 24px; flex-shrink: 0; padding-top: 2px; }
+.cs-info { flex: 1; }
+.cs-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.cs-desc { font-size: 13px; color: #757575; line-height: 1.4; }
+.cs-vote { background: none; border: 1.5px solid #E0E0E0; border-radius: 10px; padding: 6px 12px; font-size: 16px; cursor: pointer; transition: all 0.2s; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cs-vote.voted { background: #E8F5E9; border-color: #00C853; }
+.cs-feedback-header { font-size: 16px; font-weight: 600; }
+
+/* Store suggestions */
+.store-suggestions { padding: 8px 0; }
+.store-suggestions-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px 8px; font-size: 13px; color: #757575; }
+.suggestions-info { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #00C853; color: #fff; font-size: 10px; font-weight: 600; font-style: italic; font-family: Georgia, serif; cursor: pointer; }
+.suggestion-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; opacity: 0.5; }
+.suggestion-item-name { font-size: 15px; color: #757575; flex: 1; }
+.suggestion-add { background: none; border: 1.5px solid #E0E0E0; border-radius: 8px; padding: 6px 14px; font-size: 13px; font-family: 'Inter', sans-serif; color: #00C853; cursor: pointer; min-width: 44px; min-height: 36px; transition: all 0.2s; }
+.suggestion-add:hover { background: #E8F5E9; border-color: #00C853; }
 
 /* Probably Need */
 .probably-need-section { padding-bottom: 8px; margin: 0 20px; }

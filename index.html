@@ -32,8 +32,8 @@
       <div class="menu-item active" data-screen="shopping"><span class="menu-item-icon">🛒</span> Shopping List</div>
       <div class="menu-item" data-screen="inventory"><span class="menu-item-icon">📦</span> Inventory</div>
       <div class="menu-item" data-screen="recipes"><span class="menu-item-icon">🍳</span> Recipes</div>
-      <div class="menu-item" data-screen="finances"><span class="menu-item-icon">💰</span> Finances</div>
       <div class="menu-item" data-screen="activity"><span class="menu-item-icon">📋</span> Activity</div>
+      <div class="menu-item" data-screen="comingsoon"><span class="menu-item-icon">🚀</span> Coming Soon</div>
       <div class="menu-item" data-screen="profile"><span class="menu-item-icon">⚙️</span> Profile & Settings</div>
     </div>
     <div class="menu-signout">
@@ -47,34 +47,63 @@
       <div class="icon">🧊</div>
       <h1>Fridge<span>Brain</span></h1>
     </div>
-    <div class="login-welcome" id="loginWelcome">Welcome back</div>
-    <div id="loginForm">
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="you@example.com">
-      </div>
-      <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="loginPassword" placeholder="••••••••">
-      </div>
-      <button class="btn btn-primary login-btn" id="loginBtn">Sign In</button>
-      <div class="login-switch">New here? <a id="showSignup">Create account</a></div>
+    <div class="login-welcome">Your household grocery brain</div>
+    <button class="btn-google" id="googleSignIn">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0124 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 01-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+      Continue with Google
+    </button>
+    <div class="login-terms">By continuing, you agree to our Terms of Service and Privacy Policy</div>
+  </div>
+
+  <!-- ==================== SCREEN: ONBOARDING ==================== -->
+  <div class="screen login-screen" id="screen-onboarding">
+    <div class="login-logo">
+      <div class="icon">🏠</div>
+      <h1>Set up your household</h1>
     </div>
-    <div id="signupForm" style="display:none; width:100%;">
-      <div class="input-group">
-        <label>Name</label>
-        <input type="text" id="signupName" placeholder="Your name">
+    <div class="login-welcome">Join or create a household to get started</div>
+
+    <div class="onboarding-cards">
+      <div class="onboarding-card" id="onboardCreate">
+        <div class="onboarding-card-icon">✨</div>
+        <div class="onboarding-card-title">Create a household</div>
+        <div class="onboarding-card-sub">Start fresh and invite your roommates or family</div>
       </div>
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" id="signupEmail" placeholder="you@example.com">
+      <div class="onboarding-card" id="onboardJoin">
+        <div class="onboarding-card-icon">🔗</div>
+        <div class="onboarding-card-title">Join a household</div>
+        <div class="onboarding-card-sub">Enter an invite code from someone you live with</div>
       </div>
+    </div>
+
+    <!-- Create household form -->
+    <div id="createHouseholdForm" style="display:none; width:100%;">
       <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="signupPassword" placeholder="••••••••">
+        <label>Household name</label>
+        <input type="text" id="newHouseholdName" placeholder="e.g. The Apartment, Family Home">
       </div>
-      <button class="btn btn-primary login-btn" id="signupBtn">Create Account</button>
-      <div class="login-switch">Already have an account? <a id="showLogin">Sign in</a></div>
+      <button class="btn btn-primary" id="createHouseholdBtn" style="margin-top:8px">Create household</button>
+      <button class="btn btn-secondary" id="createHouseholdBack">Back</button>
+    </div>
+
+    <!-- Create success -->
+    <div id="createHouseholdSuccess" style="display:none; width:100%; text-align:center;">
+      <div style="font-size:48px; margin-bottom:16px">🎉</div>
+      <h3 style="margin-bottom:8px">Household created!</h3>
+      <p style="color:#757575; font-size:14px; margin-bottom:16px">Share this invite code with your household</p>
+      <div class="invite-code" id="inviteCodeDisplay">FB</div>
+      <button class="btn btn-secondary" id="copyInviteCode" style="margin-top:12px">📋 Copy code</button>
+      <button class="btn btn-primary" id="createHouseholdDone" style="margin-top:12px">Get started</button>
+    </div>
+
+    <!-- Join household form -->
+    <div id="joinHouseholdForm" style="display:none; width:100%;">
+      <div class="input-group">
+        <label>Invite code</label>
+        <input type="text" id="joinInviteCode" placeholder="e.g. FB" style="text-transform:uppercase; text-align:center; font-size:20px; letter-spacing:4px;">
+      </div>
+      <button class="btn btn-primary" id="joinHouseholdBtn" style="margin-top:8px">Join household</button>
+      <button class="btn btn-secondary" id="joinHouseholdBack">Back</button>
     </div>
   </div>
 
@@ -87,63 +116,18 @@
       <div class="avatar">EB</div>
     </div>
 
-    <div class="household-wrap">
-      <div class="household-selector" id="householdSelector2">
-        🏠 <span class="householdNameSync">The Apartment</span> <span style="font-size:12px">▼</span>
-      </div>
-      <div class="household-dropdown" id="householdDropdown2">
-        <div class="household-option active" data-household="The Apartment">🏠 The Apartment</div>
-        <div class="household-option" data-household="Family Home">🏡 Family Home</div>
-      </div>
-    </div>
-
     <!-- Mode Toggle -->
     <div class="mode-toggle">
       <button class="mode-btn active" data-mode="daytoday">📋 Day-to-day</button>
       <button class="mode-btn" data-mode="atstore">🛒 At the store</button>
     </div>
 
-    <!-- PROBABLY NEED ROW -->
-    <div class="probably-need-section" id="probablyNeedSection">
-      <div class="probably-need-label">Probably Need Soon <span class="pn-info-header" id="pnInfoBtn2">i</span></div>
-      <div class="probably-need-wrap">
-        <button class="pn-arrow pn-arrow-left" id="pnArrowLeft" style="display:none">‹</button>
-        <div class="probably-need-scroll" id="pnScroll">
-          <div class="probably-need-card urgent" data-pn-name="Whole Milk">
-            <span class="pn-name">Whole Milk</span>
-            <button class="pn-add">＋</button>
-          </div>
-          <div class="probably-need-card urgent" data-pn-name="Eggs (12ct)">
-            <span class="pn-name">Eggs</span>
-            <button class="pn-add">＋</button>
-          </div>
-          <div class="probably-need-card" data-pn-name="Bananas">
-            <span class="pn-name">Bananas</span>
-            <button class="pn-add">＋</button>
-          </div>
-          <div class="probably-need-card" data-pn-name="Chicken Breast">
-            <span class="pn-name">Chicken Breast</span>
-            <button class="pn-add">＋</button>
-          </div>
-          <div class="probably-need-card" data-pn-name="Paper Towels">
-            <span class="pn-name">Paper Towels</span>
-            <button class="pn-add">＋</button>
-          </div>
-          <div class="probably-need-card" data-pn-name="Butter">
-            <span class="pn-name">Butter</span>
-            <button class="pn-add">＋</button>
-          </div>
-        </div>
-        <button class="pn-arrow" id="pnArrowRight">›</button>
-      </div>
-
-      <!-- Priority Info Modal -->
-      <div class="modal-overlay" id="pnInfoModal">
-        <div class="modal">
-          <h3>Priority Item</h3>
-          <p>Items with a red highlight are things you're likely running low on, based on your household's purchase history. We recommend picking these up on your next trip.</p>
-          <button class="btn btn-secondary" id="pnInfoClose">Got it</button>
-        </div>
+    <!-- Suggestions Info Modal -->
+    <div class="modal-overlay" id="suggestionsInfoModal">
+      <div class="modal">
+        <h3>Suggested Items</h3>
+        <p>These suggestions are based on your past purchases and ranked by how likely you are to need them. Add any with one tap.</p>
+        <button class="btn btn-secondary" id="suggestionsInfoClose">Got it</button>
       </div>
     </div>
 
@@ -177,7 +161,7 @@
         </div>
       </div>
 
-      <div class="list-section-header hh-header">What everyone needs</div>
+      <div class="list-section-header hh-header">Household items</div>
       <div id="householdListItems">
         <div class="hh-list-card">
           <div class="list-item-check"></div>
@@ -212,7 +196,16 @@
           </div>
         </div>
       </div>
-      
+
+      <!-- Suggestions -->
+      <div class="store-suggestions" id="daytodaySuggestions">
+        <div class="store-suggestions-header">
+          <span>Suggested for you</span>
+          <span class="suggestions-info" id="suggestionsInfoBtn">i</span>
+        </div>
+        <div id="daytodaySuggestionItems"></div>
+      </div>
+
     </div>
 
     <!-- DAY-TO-DAY FAMILY VIEW -->
@@ -260,7 +253,16 @@
           <button class="my-list-remove">×</button>
         </div>
       </div>
-      
+
+      <!-- Suggestions -->
+      <div class="store-suggestions" id="familyDaytodaySuggestions">
+        <div class="store-suggestions-header">
+          <span>Suggested for you</span>
+          <span class="suggestions-info" id="familySuggestionsInfoBtn">i</span>
+        </div>
+        <div id="familyDaytodaySuggestionItems"></div>
+      </div>
+
     </div>
 
     <!-- AT THE STORE FAMILY VIEW -->
@@ -293,7 +295,7 @@
           <button class="btn btn-primary" id="doneShoppingFamily">Done shopping</button>
         </div>
       </div>
-      
+
     </div>
 
     <!-- AT THE STORE VIEW -->
@@ -339,16 +341,15 @@
           <button class="btn btn-primary" id="doneShopping">Done shopping</button>
         </div>
       </div>
-      
+
     </div>
 
     <!-- Done Shopping Modal -->
     <div class="modal-overlay" id="doneShoppingModal">
       <div class="modal">
         <h3>All done! 🎉</h3>
-        <p>Checked items have been cleared</p>
-        <button class="btn btn-primary" id="doneReceiptYes">📷 Take a photo of your receipt</button>
-        <button class="btn btn-secondary" id="doneReceiptNo">Skip for now</button>
+        <p>Checked items will be cleared from the list and added to your inventory</p>
+        <button class="btn btn-primary" id="doneShoppingClose">Done</button>
       </div>
     </div>
 
@@ -379,6 +380,24 @@
         <h3>✅ Added!</h3>
         <p id="addedItemText">Item added to your list</p>
         <button class="btn btn-secondary" id="addedDone">Done</button>
+      </div>
+    </div>
+
+    <!-- Edit Item Modal -->
+    <div class="modal-overlay" id="editItemModal">
+      <div class="modal" style="text-align:left">
+        <h3 style="text-align:center">Edit Item</h3>
+        <div class="input-group" style="margin-top:16px">
+          <label>Item name</label>
+          <input type="text" id="editItemName">
+        </div>
+        <div class="input-group">
+          <label>Notes</label>
+          <input type="text" id="editItemNotes" placeholder="Add a note...">
+        </div>
+        <button class="btn btn-primary" id="editItemSave" style="margin-top:12px">Save</button>
+        <button class="btn btn-danger" id="editItemDelete" style="margin-top:8px">Remove from list</button>
+        <button class="btn btn-secondary" id="editItemCancel" style="margin-top:8px">Cancel</button>
       </div>
     </div>
 
@@ -576,113 +595,82 @@
     </div>
   </div>
 
-  <!-- ==================== SCREEN: FINANCES ==================== -->
-  <div class="screen" id="screen-finances">
+  <!-- ==================== SCREEN: COMING SOON ==================== -->
+  <div class="screen" id="screen-comingsoon">
     <div class="top-bar">
       <button class="hamburger"><span></span><span></span><span></span></button>
       <div class="top-bar-logo">Fridge<span>Brain</span></div>
       <div class="avatar">EB</div>
     </div>
 
-    <div class="section-header">Finances</div>
+    <div class="section-header">Coming Soon</div>
+    <p style="padding:0 20px 20px;font-size:14px;color:#757575;line-height:1.5">We're building these features next. Vote on what matters most to you!</p>
 
-    <!-- Receipt / Split Costs Toggle -->
-    <div class="mode-toggle">
-      <button class="mode-btn active" data-fin="receipt">📷 Receipt</button>
-      <button class="mode-btn" data-fin="split">💰 Split Costs</button>
-    </div>
+    <div class="coming-soon-list">
+      <div class="cs-card">
+        <div class="cs-icon">📷</div>
+        <div class="cs-info">
+          <div class="cs-title">Receipt Scanning</div>
+          <div class="cs-desc">Snap a photo of your receipt to auto-add items to inventory and track spending</div>
+        </div>
+        <button class="cs-vote" data-voted="false">👍</button>
+      </div>
 
-    <!-- RECEIPT TAB -->
-    <div class="fin-view" id="finReceiptView">
-      <div class="scanner-content">
-        <div class="upload-area" id="uploadArea">
-          <div class="upload-icon">📷</div>
-          <h3>Take a photo of your receipt</h3>
-          <p>or upload from your gallery</p>
+      <div class="cs-card">
+        <div class="cs-icon">💰</div>
+        <div class="cs-info">
+          <div class="cs-title">Cost Splitting</div>
+          <div class="cs-desc">Split grocery costs between household members and see who owes what</div>
         </div>
-        <div class="spinner-container" id="scannerSpinner">
-          <div class="spinner"></div>
-          <div class="spinner-text">Processing receipt...</div>
+        <button class="cs-vote" data-voted="false">👍</button>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-icon">💸</div>
+        <div class="cs-info">
+          <div class="cs-title">Venmo / Splitwise Integration</div>
+          <div class="cs-desc">Settle up directly through Venmo or Splitwise without leaving the app</div>
         </div>
-        <div class="receipt-result" id="receiptResult">
-          <div class="section-header" style="padding-left:0">Receipt processed! ✅</div>
-          <div class="receipt-item"><div class="receipt-check">✓</div><div class="receipt-item-name">Whole Milk x1</div><div class="receipt-item-price">$4.99</div></div>
-          <div class="receipt-item"><div class="receipt-check">✓</div><div class="receipt-item-name">Sourdough Bread x1</div><div class="receipt-item-price">$6.49</div></div>
-          <div class="receipt-item"><div class="receipt-check">✓</div><div class="receipt-item-name">Eggs (12ct) x1</div><div class="receipt-item-price">$5.99</div></div>
-          <div class="receipt-item"><div class="receipt-check">✓</div><div class="receipt-item-name">Orange Juice x1</div><div class="receipt-item-price">$4.29</div></div>
-          <div class="receipt-total"><span>Total</span><span>$21.76</span></div>
-          <div class="receipt-buttons">
-            <button class="btn btn-primary" id="addToInventoryBtn">Add to inventory</button>
-            <button class="btn btn-outline" id="splitCostsBtn">Split with household?</button>
-          </div>
+        <button class="cs-vote" data-voted="false">👍</button>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-icon">🔔</div>
+        <div class="cs-info">
+          <div class="cs-title">Push Notifications</div>
+          <div class="cs-desc">Get notified when someone's at the store, adds items, or when you're running low</div>
         </div>
+        <button class="cs-vote" data-voted="false">👍</button>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-icon">📊</div>
+        <div class="cs-info">
+          <div class="cs-title">Spending Analytics</div>
+          <div class="cs-desc">See monthly spending trends, most-purchased items, and budget tracking</div>
+        </div>
+        <button class="cs-vote" data-voted="false">👍</button>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-icon">🏪</div>
+        <div class="cs-info">
+          <div class="cs-title">Store Price Comparison</div>
+          <div class="cs-desc">Compare prices across stores to find the best deals on your list</div>
+        </div>
+        <button class="cs-vote" data-voted="false">👍</button>
       </div>
     </div>
 
-    <!-- SPLIT COSTS TAB -->
-    <div class="fin-view" id="finSplitView" style="display:none">
-      <div class="balance-card positive">
-        <div class="balance-amount positive">$12.40</div>
-        <div class="balance-label">You are owed</div>
+    <div style="padding:20px">
+      <div class="cs-feedback-header">Have an idea?</div>
+      <div class="input-group" style="margin-top:8px">
+        <input type="text" id="csFeedbackInput" placeholder="Tell us what feature you'd love to see...">
       </div>
-
-      <div class="expense-card" data-expense="1">
-        <div class="expense-header">
-          <span class="expense-who">Shura — Whole Foods</span>
-          <span class="expense-amount">$45.30</span>
-        </div>
-        <div class="expense-meta">March 18, 2026</div>
-        <div class="expense-details" data-expdetail="1">
-          <div class="expense-breakdown-item"><span>Whole Milk x1</span><span>$4.99</span></div>
-          <div class="expense-breakdown-item"><span>Chicken Breast x2</span><span>$12.99</span></div>
-          <div class="expense-breakdown-item"><span>Sourdough Bread x1</span><span>$6.49</span></div>
-          <div class="expense-breakdown-item"><span>Avocados x3</span><span>$5.97</span></div>
-          <div class="expense-breakdown-item"><span>Orange Juice x1</span><span>$4.29</span></div>
-          <div class="expense-breakdown-item"><span>Eggs x1</span><span>$5.99</span></div>
-          <div class="expense-breakdown-item"><span>Snacks</span><span>$4.58</span></div>
-          <div class="expense-shares">
-            <div class="expense-share"><span>Elliot</span><span>$15.10</span></div>
-            <div class="expense-share"><span>Shura</span><span>$15.10</span></div>
-            <div class="expense-share"><span>Nadia</span><span>$15.10</span></div>
-          </div>
-          <div class="expense-actions">
-            <button class="btn btn-primary" onclick="showToast('Opening Venmo...')">Settle via Venmo</button>
-            <button class="btn btn-outline" onclick="showToast('Opening Splitwise...')">Settle via Splitwise</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="expense-card" data-expense="2">
-        <div class="expense-header">
-          <span class="expense-who">Elliot — Trader Joe's</span>
-          <span class="expense-amount">$33.60</span>
-        </div>
-        <div class="expense-meta">March 15, 2026</div>
-        <div class="expense-details" data-expdetail="2">
-          <div class="expense-breakdown-item"><span>Pasta x2</span><span>$5.98</span></div>
-          <div class="expense-breakdown-item"><span>Tomato Sauce x2</span><span>$7.98</span></div>
-          <div class="expense-breakdown-item"><span>Cheese x1</span><span>$4.99</span></div>
-          <div class="expense-breakdown-item"><span>Salad mix x1</span><span>$3.99</span></div>
-          <div class="expense-breakdown-item"><span>Snacks</span><span>$10.66</span></div>
-          <div class="expense-shares">
-            <div class="expense-share"><span>Elliot</span><span>$11.20</span></div>
-            <div class="expense-share"><span>Shura</span><span>$11.20</span></div>
-            <div class="expense-share"><span>Nadia</span><span>$11.20</span></div>
-          </div>
-          <div class="expense-actions">
-            <button class="btn btn-primary" onclick="showToast('Opening Venmo...')">Settle via Venmo</button>
-            <button class="btn btn-outline" onclick="showToast('Opening Splitwise...')">Settle via Splitwise</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="history-section">
-        <div class="history-header">Settled</div>
-        <div class="history-item"><span>Nadia — Target · Mar 10</span><span>$28.50 ✓</span></div>
-        <div class="history-item"><span>Elliot — Whole Foods · Mar 5</span><span>$41.20 ✓</span></div>
-        <div class="history-item"><span>Shura — Costco · Feb 28</span><span>$65.00 ✓</span></div>
-      </div>
+      <button class="btn btn-primary" id="csFeedbackSubmit">Submit feedback</button>
     </div>
+
+    <div style="height:40px"></div>
   </div>
 
   <!-- ==================== SCREEN: ACTIVITY ==================== -->
@@ -700,17 +688,19 @@
       <button class="filter-tab">Nadia</button>
       <button class="filter-tab">Kalman</button>
     </div>
-    <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> bought groceries at Whole Foods</div><div class="activity-time">2h ago</div></div></div>
-    <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> added Oat Milk to the list</div><div class="activity-time">4h ago</div></div></div>
-    <div class="activity-item" data-person="Kalman"><div class="activity-avatar" style="background:#FF9800">KA</div><div class="activity-content"><div class="activity-text"><strong>Kalman</strong> added Greek Yogurt to the list</div><div class="activity-time">5h ago</div></div></div>
-    <div class="activity-item" data-person="Elliot"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> marked Eggs as running low</div><div class="activity-time">6h ago</div></div></div>
-    <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> is at Trader Joe's — need anything?</div><div class="activity-time">Yesterday</div></div></div>
-    <div class="activity-item" data-person="Kalman"><div class="activity-avatar" style="background:#FF9800">KA</div><div class="activity-content"><div class="activity-text"><strong>Kalman</strong> bought groceries at Target</div><div class="activity-time">Yesterday</div></div></div>
-    <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> settled $28.50 with the household</div><div class="activity-time">2d ago</div></div></div>
-    <div class="activity-item" data-person="Elliot"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> scanned a receipt from Trader Joe's</div><div class="activity-time">3d ago</div></div></div>
-    <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> added Olive Oil to the list</div><div class="activity-time">3d ago</div></div></div>
-    <div class="activity-item" data-person="Kalman"><div class="activity-avatar" style="background:#FF9800">KA</div><div class="activity-content"><div class="activity-text"><strong>Kalman</strong> marked Peanut Butter as running low</div><div class="activity-time">3d ago</div></div></div>
-    <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> marked Tomato Sauce as almost out</div><div class="activity-time">4d ago</div></div></div>
+    <div class="activity-list">
+      <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> bought groceries at Whole Foods</div><div class="activity-time">2h ago</div></div></div>
+      <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> added Oat Milk to the list</div><div class="activity-time">4h ago</div></div></div>
+      <div class="activity-item" data-person="Kalman"><div class="activity-avatar" style="background:#FF9800">KA</div><div class="activity-content"><div class="activity-text"><strong>Kalman</strong> added Greek Yogurt to the list</div><div class="activity-time">5h ago</div></div></div>
+      <div class="activity-item" data-person="Elliot"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> marked Eggs as running low</div><div class="activity-time">6h ago</div></div></div>
+      <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> is at Trader Joe's — need anything?</div><div class="activity-time">Yesterday</div></div></div>
+      <div class="activity-item" data-person="Kalman"><div class="activity-avatar" style="background:#FF9800">KA</div><div class="activity-content"><div class="activity-text"><strong>Kalman</strong> bought groceries at Target</div><div class="activity-time">Yesterday</div></div></div>
+      <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> settled $28.50 with the household</div><div class="activity-time">2d ago</div></div></div>
+      <div class="activity-item" data-person="Elliot"><div class="activity-avatar" style="background:#00C853">EB</div><div class="activity-content"><div class="activity-text"><strong>Elliot</strong> scanned a receipt from Trader Joe's</div><div class="activity-time">3d ago</div></div></div>
+      <div class="activity-item" data-person="Shura"><div class="activity-avatar" style="background:#42A5F5">SH</div><div class="activity-content"><div class="activity-text"><strong>Shura</strong> added Olive Oil to the list</div><div class="activity-time">3d ago</div></div></div>
+      <div class="activity-item" data-person="Kalman"><div class="activity-avatar" style="background:#FF9800">KA</div><div class="activity-content"><div class="activity-text"><strong>Kalman</strong> marked Peanut Butter as running low</div><div class="activity-time">3d ago</div></div></div>
+      <div class="activity-item" data-person="Nadia"><div class="activity-avatar" style="background:#AB47BC">NA</div><div class="activity-content"><div class="activity-text"><strong>Nadia</strong> marked Tomato Sauce as almost out</div><div class="activity-time">4d ago</div></div></div>
+    </div>
   </div>
 
   <!-- ==================== SCREEN: PROFILE ==================== -->
@@ -726,11 +716,51 @@
         <div class="profile-name">Elliot Boz</div>
         <div class="profile-email">elliot.j.boz@gmail.com</div>
       </div>
+
       <div class="profile-section">
-        <div class="profile-section-title">Your Households</div>
-        <div class="profile-card"><div><div class="profile-card-name">🏠 The Apartment</div><div class="profile-card-meta">4 members</div></div></div>
-        <div class="profile-card"><div><div class="profile-card-name">🏡 Family Home</div><div class="profile-card-meta">4 members</div></div></div>
+        <div class="profile-section-title">Your Household</div>
+        <div class="profile-card">
+          <div>
+            <div class="profile-card-name">🏠 The Apartment</div>
+            <div class="profile-card-meta">4 members</div>
+          </div>
+        </div>
+
+        <div class="member-list">
+          <div class="member-row">
+            <div class="hh-avatar" style="background:#00C853">EB</div>
+            <div class="member-info">
+              <span class="member-name">Elliot Boz</span>
+              <span class="member-badge admin-badge">Admin</span>
+            </div>
+          </div>
+          <div class="member-row">
+            <div class="hh-avatar" style="background:#42A5F5">SH</div>
+            <div class="member-info"><span class="member-name">Shura</span></div>
+            <button class="member-remove" onclick="showToast('Shura removed')">✕</button>
+          </div>
+          <div class="member-row">
+            <div class="hh-avatar" style="background:#AB47BC">NA</div>
+            <div class="member-info"><span class="member-name">Nadia</span></div>
+            <button class="member-remove" onclick="showToast('Nadia removed')">✕</button>
+          </div>
+          <div class="member-row">
+            <div class="hh-avatar" style="background:#FF9800">KA</div>
+            <div class="member-info"><span class="member-name">Kalman</span></div>
+            <button class="member-remove" onclick="showToast('Kalman removed')">✕</button>
+          </div>
+        </div>
+
+        <div class="invite-section">
+          <div class="profile-section-title" style="margin-top:16px">Invite Code</div>
+          <div class="invite-code-row">
+            <div class="invite-code">FB</div>
+            <button class="btn-copy" id="profileCopyCode">📋 Copy</button>
+          </div>
+          <button class="btn btn-secondary" id="regenInviteCode" style="margin-top:8px">Regenerate code</button>
+        </div>
       </div>
+
       <div class="profile-section">
         <div class="profile-section-title">Household Mode</div>
         <div class="toggle-row">
@@ -742,25 +772,24 @@
         </div>
         <div class="family-mode-desc" id="familyModeDesc">When enabled, the shopping list is shared — no separation between individual members' items. Best for families where groceries are communal.</div>
       </div>
-      <div class="profile-section">
-        <div class="profile-section-title">Your Households</div>
-        <div class="profile-buttons">
-          <button class="btn btn-outline" onclick="showToast('Coming soon!')">Create new household</button>
-          <button class="btn btn-secondary" onclick="showToast('Coming soon!')">Join a household</button>
-        </div>
-      </div>
+
       <div class="profile-section">
         <div class="profile-section-title">Notifications</div>
         <div class="toggle-row"><span class="toggle-label">Someone is at the store</span><div class="toggle-switch on"></div></div>
         <div class="toggle-row"><span class="toggle-label">Item added to list</span><div class="toggle-switch on"></div></div>
         <div class="toggle-row"><span class="toggle-label">Running low reminder</span><div class="toggle-switch"></div></div>
       </div>
+
       <div class="profile-section">
         <div class="profile-section-title">Linked Stores</div>
         <div><span class="store-tag">📍 Whole Foods</span><span class="store-tag">📍 Trader Joe's</span><span class="store-tag">📍 Target</span></div>
-        <div class="profile-buttons"><button class="btn btn-secondary" onclick="showToast('Coming soon!')">Add a store</button></div>
+        <div class="profile-buttons">
+          <button class="btn btn-secondary" id="addStoreBtn">Add a store</button>
+        </div>
       </div>
-      <button class="btn btn-danger" id="profileSignout">Sign Out</button>
+
+      <button class="btn btn-danger" id="leaveHousehold" style="margin-top:8px">Leave household</button>
+      <button class="btn btn-danger" id="profileSignout" style="margin-top:8px">Sign Out</button>
     </div>
   </div>
 

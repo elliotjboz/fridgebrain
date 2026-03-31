@@ -30,20 +30,96 @@ document.querySelectorAll('.menu-item[data-screen]').forEach(function (item) {
 });
 document.getElementById('menuSignout').addEventListener('click', function () { closeMenu(); showScreen('login'); });
 
-// ===== LOGIN / SIGNUP =====
-var loginForm = document.getElementById('loginForm');
-var signupForm = document.getElementById('signupForm');
-var loginWelcome = document.getElementById('loginWelcome');
+// ===== LOGIN / ONBOARDING =====
+var isNewUser = true;
 
-document.getElementById('showSignup').addEventListener('click', function () {
-  loginForm.style.display = 'none'; signupForm.style.display = 'block'; loginWelcome.textContent = 'Create your account';
+document.getElementById('googleSignIn').addEventListener('click', function () {
+  if (isNewUser) {
+    showScreen('onboarding');
+  } else {
+    showScreen('shopping');
+    showToast('Welcome back, Elliot!');
+  }
+  // After first sign-in, treat as existing user
+  isNewUser = false;
 });
-document.getElementById('showLogin').addEventListener('click', function () {
-  signupForm.style.display = 'none'; loginForm.style.display = 'block'; loginWelcome.textContent = 'Welcome back';
+
+// Onboarding — Create household
+var onboardCards = document.querySelector('.onboarding-cards');
+var createForm = document.getElementById('createHouseholdForm');
+var createSuccess = document.getElementById('createHouseholdSuccess');
+var joinForm = document.getElementById('joinHouseholdForm');
+
+document.getElementById('onboardCreate').addEventListener('click', function () {
+  onboardCards.style.display = 'none';
+  createForm.style.display = '';
 });
-document.getElementById('loginBtn').addEventListener('click', function () { showScreen('shopping'); showToast('Welcome back, Elliot!'); });
-document.getElementById('signupBtn').addEventListener('click', function () { showScreen('shopping'); showToast('Account created! Welcome, Elliot!'); });
+
+document.getElementById('createHouseholdBack').addEventListener('click', function () {
+  createForm.style.display = 'none';
+  onboardCards.style.display = '';
+});
+
+document.getElementById('createHouseholdBtn').addEventListener('click', function () {
+  var name = document.getElementById('newHouseholdName').value || 'My Household';
+  createForm.style.display = 'none';
+  createSuccess.style.display = '';
+});
+
+document.getElementById('copyInviteCode').addEventListener('click', function () {
+  showToast('Invite code copied!');
+});
+
+document.getElementById('createHouseholdDone').addEventListener('click', function () {
+  showScreen('shopping');
+  showToast('Household created! Welcome!');
+  // Reset onboarding for next time
+  createSuccess.style.display = 'none';
+  onboardCards.style.display = '';
+});
+
+// Onboarding — Join household
+document.getElementById('onboardJoin').addEventListener('click', function () {
+  onboardCards.style.display = 'none';
+  joinForm.style.display = '';
+});
+
+document.getElementById('joinHouseholdBack').addEventListener('click', function () {
+  joinForm.style.display = 'none';
+  onboardCards.style.display = '';
+});
+
+document.getElementById('joinHouseholdBtn').addEventListener('click', function () {
+  var code = document.getElementById('joinInviteCode').value;
+  if (!code.trim()) { showToast('Please enter an invite code'); return; }
+  showScreen('shopping');
+  showToast('Joined household! Welcome!');
+  joinForm.style.display = 'none';
+  onboardCards.style.display = '';
+});
+
+// Sign out
 document.getElementById('profileSignout').addEventListener('click', function () { showScreen('login'); showToast('Signed out'); });
+
+// Leave household
+document.getElementById('leaveHousehold').addEventListener('click', function () {
+  showToast('You left the household');
+  showScreen('onboarding');
+});
+
+// Profile — copy invite code
+document.getElementById('profileCopyCode').addEventListener('click', function () {
+  showToast('Invite code copied!');
+});
+
+document.getElementById('regenInviteCode').addEventListener('click', function () {
+  showToast('New invite code generated');
+});
+
+// Add store
+document.getElementById('addStoreBtn').addEventListener('click', function () {
+  showToast('Store added!');
+});
 
 // ===== AVATAR → PROFILE =====
 document.querySelectorAll('.avatar').forEach(function (av) {
@@ -60,34 +136,7 @@ document.getElementById('notifyConfirm').addEventListener('click', function () {
   showToast('Household notified!');
 });
 
-// ===== HOUSEHOLD SELECTOR (shopping page) =====
-var householdSelector2 = document.getElementById('householdSelector2');
-var householdDropdown2 = document.getElementById('householdDropdown2');
-if (householdSelector2) {
-  householdSelector2.addEventListener('click', function () { householdDropdown2.classList.toggle('open'); });
-  householdDropdown2.querySelectorAll('.household-option').forEach(function (opt) {
-    opt.addEventListener('click', function () {
-      var name = opt.getAttribute('data-household');
-      currentHousehold = name;
-      document.querySelectorAll('.householdNameSync').forEach(function (el) { el.textContent = name; });
-      householdDropdown2.querySelectorAll('.household-option').forEach(function (o) { o.classList.remove('active'); });
-      opt.classList.add('active');
-      householdDropdown2.classList.remove('open');
-
-      // Auto-enable family mode for Family Home
-      if (name === 'Family Home') {
-        familyMode = true;
-        familyModeToggle.classList.add('on');
-      } else {
-        familyMode = false;
-        familyModeToggle.classList.remove('on');
-      }
-      applyShoppingMode();
-      applyInventoryMode();
-      showToast('Switched to ' + name);
-    });
-  });
-}
+// Household selector removed — single household in v1
 
 // "Add to My List"
 var addItemModal = document.getElementById('addItemModal');
@@ -158,6 +207,7 @@ function addItemToList(name, notes) {
     '<button class="my-list-remove">×</button>';
   myListItems.appendChild(card);
   bindRemoveBtn(card.querySelector('.my-list-remove'));
+  bindEditHandler(card);
 
   // Apartment store mode
   var storeMyItems = document.getElementById('storeMyItems');
@@ -179,9 +229,18 @@ function addItemToList(name, notes) {
     '<div class="my-list-note">' + notes + '</div></div>' +
     '<button class="my-list-remove">×</button>';
   familyListItems.appendChild(familyCard);
+  bindEditHandler(familyCard);
   familyCard.querySelector('.my-list-remove').addEventListener('click', function () {
     familyCard.style.opacity = '0';
-    setTimeout(function () { familyCard.style.display = 'none'; showToast('Removed from list'); }, 200);
+    setTimeout(function () {
+      familyCard.style.display = 'none';
+      removeItemByName('myListItems', name);
+      removeItemByName('storeMyItems', name);
+      removeItemByName('storeFamilyItems', name);
+      addToSuggestionsData(name);
+      refreshAllSuggestions();
+      showToast('Removed from list');
+    }, 200);
   });
 
   // Family store mode
@@ -204,39 +263,14 @@ var suppressAddedModal = false;
 
 var pendingItemName = '';
 var pendingItemNotes = '';
-var pendingPnCard = null;
 var duplicateModal = document.getElementById('duplicateModal');
-
-function removePnCard(card) {
-  if (!card) return;
-  card.style.transition = 'opacity 0.15s, width 0.15s, min-width 0.15s, padding 0.15s, margin 0.15s';
-  card.style.opacity = '0';
-  card.style.minWidth = '0';
-  card.style.width = '0';
-  card.style.padding = '0';
-  card.style.marginRight = '-8px';
-  card.style.overflow = 'hidden';
-  setTimeout(function () { card.style.display = 'none'; }, 150);
-}
 
 document.getElementById('duplicateConfirm').addEventListener('click', function () {
   duplicateModal.classList.remove('open');
   addItemToList(pendingItemName, pendingItemNotes);
-  if (pendingPnCard) {
-    // Show checkmark animation then remove
-    var btn = pendingPnCard.querySelector('.pn-add');
-    if (btn) {
-      btn.textContent = '✓';
-      btn.classList.add('confirmed');
-    }
-    var cardToRemove = pendingPnCard;
-    pendingPnCard = null;
-    setTimeout(function () { removePnCard(cardToRemove); }, 800);
-  }
 });
 document.getElementById('duplicateCancel').addEventListener('click', function () {
   duplicateModal.classList.remove('open');
-  pendingPnCard = null;
 });
 
 document.getElementById('addItemConfirm').addEventListener('click', function () {
@@ -351,78 +385,87 @@ showScreen = function (id) {
   if (id === 'shopping') syncStoreLists();
 };
 
-// ===== PROBABLY NEED — SCROLL ARROWS =====
-var pnScroll = document.getElementById('pnScroll');
-var pnArrowLeft = document.getElementById('pnArrowLeft');
-var pnArrowRight = document.getElementById('pnArrowRight');
-
-pnArrowRight.addEventListener('click', function () {
-  pnScroll.scrollBy({ left: 140, behavior: 'smooth' });
-});
-pnArrowLeft.addEventListener('click', function () {
-  pnScroll.scrollBy({ left: -140, behavior: 'smooth' });
-});
-
-pnScroll.addEventListener('scroll', function () {
-  pnArrowLeft.style.display = pnScroll.scrollLeft > 10 ? '' : 'none';
-  pnArrowRight.style.display = pnScroll.scrollLeft >= (pnScroll.scrollWidth - pnScroll.clientWidth - 10) ? 'none' : '';
-});
-
-// Priority info button
-document.getElementById('pnInfoBtn2').addEventListener('click', function (e) {
-  e.stopPropagation();
-  document.getElementById('pnInfoModal').classList.add('open');
-});
-document.getElementById('pnInfoClose').addEventListener('click', function () {
-  document.getElementById('pnInfoModal').classList.remove('open');
-});
-
-// ===== PROBABLY NEED ROW =====
-document.querySelectorAll('.pn-add').forEach(function (btn) {
+// ===== SUGGESTIONS INFO =====
+document.querySelectorAll('.suggestions-info').forEach(function (btn) {
   btn.addEventListener('click', function (e) {
     e.stopPropagation();
-    var card = btn.closest('.probably-need-card');
-    var name = card.getAttribute('data-pn-name');
-
-    // Check for duplicates using group system
-    var existingItems = getAllListItems();
-    var dupCheck = checkDuplicateByGroup(name, existingItems);
-    if (dupCheck.isDuplicate) {
-      pendingItemName = name;
-      pendingItemNotes = '';
-      pendingPnCard = card;
-
-      var sourceMsg = '';
-      if (dupCheck.source === 'you') {
-        sourceMsg = 'You already have';
-      } else if (dupCheck.source === 'the household') {
-        sourceMsg = 'The household already has';
-      } else {
-        sourceMsg = dupCheck.source + ' already has';
-      }
-
-      var listName = dupCheck.source === 'you' ? 'your list' : 'the list';
-      if (dupCheck.group === 'exact') {
-        document.getElementById('duplicateText').textContent = sourceMsg + ' "' + name + '" on ' + listName + '. Add anyway?';
-      } else {
-        document.getElementById('duplicateText').textContent = sourceMsg + ' "' + dupCheck.existingItem + '" (similar) on ' + listName + '. Still add "' + name + '"?';
-      }
-      duplicateModal.classList.add('open');
-      return;
-    }
-
-    addItemToList(name, '');
-    addedConfirmModal.classList.remove('open');
-
-    // Visual feedback: + → ✓ then remove card
-    btn.textContent = '✓';
-    btn.classList.add('confirmed');
-    setTimeout(function () {
-      removePnCard(card);
-    }, 1500);
-
-    showToast('Added to your list');
+    document.getElementById('suggestionsInfoModal').classList.add('open');
   });
+});
+document.getElementById('suggestionsInfoClose').addEventListener('click', function () {
+  document.getElementById('suggestionsInfoModal').classList.remove('open');
+});
+
+// Build suggestions on day-to-day views at load (deferred to ensure suggestionsData is defined)
+setTimeout(function () {
+  buildSuggestions('daytodaySuggestionItems');
+  buildSuggestions('familyDaytodaySuggestionItems');
+}, 0);
+
+// ===== EDIT ITEM =====
+var editItemModal = document.getElementById('editItemModal');
+var editingCard = null;
+
+function bindEditHandler(card) {
+  var info = card.querySelector('.my-list-info');
+  if (!info) return;
+  info.addEventListener('click', function (e) {
+    e.stopPropagation();
+    editingCard = card;
+    var name = card.querySelector('.my-list-name').textContent;
+    var noteEl = card.querySelector('.my-list-note');
+    var note = noteEl ? noteEl.textContent : '';
+    document.getElementById('editItemName').value = name;
+    document.getElementById('editItemNotes').value = note;
+    editItemModal.classList.add('open');
+  });
+}
+
+// Bind edit on existing my-list cards
+document.querySelectorAll('#myListItems .my-list-card').forEach(bindEditHandler);
+document.querySelectorAll('#familyListItems .my-list-card').forEach(bindEditHandler);
+
+document.getElementById('editItemSave').addEventListener('click', function () {
+  if (!editingCard) return;
+  var newName = document.getElementById('editItemName').value.trim();
+  var newNotes = document.getElementById('editItemNotes').value.trim();
+  if (!newName) { showToast('Item name cannot be empty'); return; }
+
+  var oldName = editingCard.querySelector('.my-list-name').textContent;
+  editingCard.querySelector('.my-list-name').textContent = newName;
+  var noteEl = editingCard.querySelector('.my-list-note');
+  if (noteEl) noteEl.textContent = newNotes;
+
+  editItemModal.classList.remove('open');
+  editingCard = null;
+  refreshAllSuggestions();
+  showToast('Item updated');
+});
+
+function addToSuggestionsData(name) {
+  var lower = name.toLowerCase();
+  var exists = suggestionsData.some(function (s) { return s.toLowerCase() === lower; });
+  if (!exists) suggestionsData.unshift(name);
+}
+
+document.getElementById('editItemDelete').addEventListener('click', function () {
+  if (!editingCard) return;
+  var name = editingCard.querySelector('.my-list-name').textContent;
+  editingCard.style.display = 'none';
+  removeItemByName('storeMyItems', name);
+  removeItemByName('familyListItems', name);
+  removeItemByName('storeFamilyItems', name);
+  removeItemByName('myListItems', name);
+  addToSuggestionsData(name);
+  refreshAllSuggestions();
+  editItemModal.classList.remove('open');
+  editingCard = null;
+  showToast('Removed from list');
+});
+
+document.getElementById('editItemCancel').addEventListener('click', function () {
+  editItemModal.classList.remove('open');
+  editingCard = null;
 });
 
 // ===== SHOPPING LIST — MODE TOGGLE =====
@@ -441,46 +484,6 @@ document.querySelectorAll('.list-item-check').forEach(function (check) {
     if (check.classList.contains('checked')) showToast('Marked as bought!');
   });
 });
-
-// Add item back to Probably Need Soon row as urgent (red)
-function addToProbablyNeed(name) {
-  var scroll = document.getElementById('pnScroll');
-  var card = document.createElement('div');
-  card.className = 'probably-need-card urgent';
-  card.setAttribute('data-pn-name', name);
-  card.innerHTML = '<span class="pn-name">' + name + '</span><button class="pn-add">＋</button>';
-  // Insert at the beginning (red items go first)
-  scroll.insertBefore(card, scroll.firstChild);
-
-  // Bind the + button
-  card.querySelector('.pn-add').addEventListener('click', function (e) {
-    e.stopPropagation();
-    var existingItems = getAllListItems();
-    var dupCheck = checkDuplicateByGroup(name, existingItems);
-    if (dupCheck.isDuplicate) {
-      pendingItemName = name;
-      pendingItemNotes = '';
-      pendingPnCard = card;
-      var sourceMsg = dupCheck.source === 'you' ? 'You already have' : dupCheck.source === 'the household' ? 'The household already has' : dupCheck.source + ' already has';
-      var listName = dupCheck.source === 'you' ? 'your list' : 'the list';
-      if (dupCheck.group === 'exact') {
-        document.getElementById('duplicateText').textContent = sourceMsg + ' "' + name + '" on ' + listName + '. Add anyway?';
-      } else {
-        document.getElementById('duplicateText').textContent = sourceMsg + ' "' + dupCheck.existingItem + '" (similar) on ' + listName + '. Still add "' + name + '"?';
-      }
-      duplicateModal.classList.add('open');
-      return;
-    }
-    suppressAddedModal = true;
-    addItemToList(name, '');
-    suppressAddedModal = false;
-    var addBtn = card.querySelector('.pn-add');
-    addBtn.textContent = '✓';
-    addBtn.classList.add('confirmed');
-    setTimeout(function () { removePnCard(card); }, 800);
-    showToast('Added to your list');
-  });
-}
 
 // Remove item by name from a container's children
 function removeItemByName(containerId, name) {
@@ -508,7 +511,8 @@ function bindRemoveBtn(btn) {
       removeItemByName('storeMyItems', name);
       removeItemByName('familyListItems', name);
       removeItemByName('storeFamilyItems', name);
-      addToProbablyNeed(name);
+      addToSuggestionsData(name);
+      refreshAllSuggestions();
       showToast('Removed from your list');
     }, 200);
   });
@@ -535,7 +539,8 @@ document.querySelectorAll('#familyListItems .my-list-remove').forEach(function (
       removeItemByName('myListItems', name);
       removeItemByName('storeMyItems', name);
       removeItemByName('storeFamilyItems', name);
-      addToProbablyNeed(name);
+      addToSuggestionsData(name);
+      refreshAllSuggestions();
       showToast('Removed from list');
     }, 200);
   });
@@ -551,26 +556,128 @@ document.querySelectorAll('#storeFamilyItems .store-check').forEach(function (ch
 
 // Done shopping
 var doneShoppingModal = document.getElementById('doneShoppingModal');
-document.getElementById('doneShopping').addEventListener('click', function () { doneShoppingModal.classList.add('open'); });
-document.getElementById('doneShoppingFamily').addEventListener('click', function () { doneShoppingModal.classList.add('open'); });
+document.getElementById('doneShopping').addEventListener('click', function () {
+  var checked = document.querySelectorAll('.store-item.checked-off');
+  if (checked.length === 0) { showToast('No items checked off yet'); return; }
+  doneShoppingModal.classList.add('open');
+});
+document.getElementById('doneShoppingFamily').addEventListener('click', function () {
+  var checked = document.querySelectorAll('.store-item.checked-off');
+  if (checked.length === 0) { showToast('No items checked off yet'); return; }
+  doneShoppingModal.classList.add('open');
+});
+var suggestionsData = ['Whole Milk', 'Eggs (12ct)', 'Butter', 'Bananas', 'Chicken Breast', 'Greek Yogurt', 'Paper Towels', 'Pasta'];
+
+function refreshAllSuggestions() {
+  buildSuggestions('daytodaySuggestionItems');
+  buildSuggestions('familyDaytodaySuggestionItems');
+}
+
+function buildSuggestions(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  // Filter out items already on any list
+  var existing = getAllListItems().map(function (i) { return i.name.toLowerCase(); });
+  var filtered = suggestionsData.filter(function (name) {
+    return existing.indexOf(name.toLowerCase()) === -1;
+  });
+  filtered.forEach(function (name) {
+    var item = document.createElement('div');
+    item.className = 'suggestion-item';
+    item.innerHTML = '<span class="suggestion-item-name">' + name + '</span><button class="suggestion-add">+ Add</button>';
+    container.appendChild(item);
+    item.querySelector('.suggestion-add').addEventListener('click', function () {
+      suppressAddedModal = true;
+      addItemToList(name, '');
+      suppressAddedModal = false;
+      // Remove from all suggestion containers
+      refreshAllSuggestions();
+      showToast(name + ' added to your list');
+    });
+  });
+}
+
+function addBoughtItemToInventory(name) {
+  var key = name.toLowerCase().replace(/\s+/g, '-') + '-bought-' + Date.now();
+  var purchasedAt = Date.now();
+  invData[key] = { name: name, qty: '—', status: 'Plenty', statusClass: 'status-green', purchasedAt: purchasedAt };
+
+  // Add to Mine view
+  var card = document.createElement('div');
+  card.className = 'inventory-card';
+  card.setAttribute('data-inv-item', key);
+  card.innerHTML = '<div class="inventory-card-name">' + name + '</div>' +
+    '<div class="inventory-card-qty">Just bought</div>' +
+    '<span class="status-badge status-green">Plenty</span>';
+  document.querySelector('#invMineView .inventory-grid').appendChild(card);
+
+  // Add to Family view
+  var familyCard = card.cloneNode(true);
+  document.querySelector('#invFamilyView .inventory-grid').appendChild(familyCard);
+
+  // Bind click on both
+  [card, familyCard].forEach(function (c) {
+    c.addEventListener('click', function () {
+      var d = invData[key]; if (!d) return;
+      currentInvKey = key;
+      document.getElementById('invDetailName').textContent = d.name;
+      document.getElementById('invDetailQty').textContent = d.qty;
+      document.getElementById('invDetailStatus').innerHTML = '<span class="status-badge ' + d.statusClass + '">' + d.status + '</span>';
+      document.getElementById('invDetailActions').style.display = familyMode ? '' : '';
+      document.getElementById('invDetailReadonly').style.display = 'none';
+      invDetailModal.classList.add('open');
+    });
+  });
+
+  // Simulate 2-week expiry: after 14 days, move to suggestions
+  // For prototype, we'll mark with purchasedAt for backend to handle
+  // Frontend can check on load and gray out expired items
+}
+
 function clearCheckedStoreItems() {
-  document.querySelectorAll('.store-item.checked-off').forEach(function (item) {
+  var checked = document.querySelectorAll('.store-item.checked-off');
+  if (checked.length === 0) return false;
+
+  // Collect names of bought items
+  var boughtNames = [];
+  checked.forEach(function (item) {
+    var nameEl = item.querySelector('.store-item-name');
+    if (nameEl) boughtNames.push(nameEl.textContent);
+  });
+
+  // Remove checked items from store view
+  checked.forEach(function (item) {
     item.style.transition = 'opacity 0.2s';
     item.style.opacity = '0';
     setTimeout(function () { item.remove(); }, 200);
   });
+
+  // Add bought items to inventory
+  setTimeout(function () {
+    boughtNames.forEach(function (name) {
+      // Don't add if already in inventory
+      var alreadyInInventory = false;
+      for (var k in invData) {
+        if (invData[k].name.toLowerCase() === name.toLowerCase()) {
+          alreadyInInventory = true;
+          break;
+        }
+      }
+      if (!alreadyInInventory) addBoughtItemToInventory(name);
+    });
+
+    var count = boughtNames.length;
+    showToast(count + ' item' + (count > 1 ? 's' : '') + ' added to inventory');
+  }, 300);
+  return true;
 }
 
-document.getElementById('doneReceiptYes').addEventListener('click', function () {
+document.getElementById('doneShoppingClose').addEventListener('click', function () {
   clearCheckedStoreItems();
   doneShoppingModal.classList.remove('open');
-  showScreen('finances');
 });
-document.getElementById('doneReceiptNo').addEventListener('click', function () {
-  clearCheckedStoreItems();
-  doneShoppingModal.classList.remove('open');
-  showToast('Shopping trip saved!');
-});
+// doneReceiptNo removed — simplified done shopping modal
 
 // FAB on shopping list → same add item modal as home page
 document.getElementById('addToMyListFab').addEventListener('click', function () { addItemModal.classList.add('open'); });
@@ -754,92 +861,7 @@ document.getElementById('addInvConfirm').addEventListener('click', function () {
   showToast(name + ' added to inventory!');
 });
 
-// ===== FINANCES — RECEIPT/SPLIT TOGGLE =====
-document.querySelectorAll('.mode-btn[data-fin]').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    document.querySelectorAll('.mode-btn[data-fin]').forEach(function (b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    var view = btn.getAttribute('data-fin');
-    document.getElementById('finReceiptView').style.display = view === 'receipt' ? '' : 'none';
-    document.getElementById('finSplitView').style.display = view === 'split' ? '' : 'none';
-    if (view === 'receipt') resetReceiptScanner();
-  });
-});
-
-// Receipt scanner
-var uploadArea = document.getElementById('uploadArea');
-var scannerSpinner = document.getElementById('scannerSpinner');
-var receiptResult = document.getElementById('receiptResult');
-
-uploadArea.addEventListener('click', function () {
-  uploadArea.style.display = 'none';
-  scannerSpinner.classList.add('show');
-  setTimeout(function () {
-    scannerSpinner.classList.remove('show');
-    receiptResult.classList.add('show');
-  }, 2000);
-});
-
-document.getElementById('addToInventoryBtn').addEventListener('click', function () {
-  var receiptItems = [
-    { name: 'Whole Milk', qty: '1 gallon' },
-    { name: 'Sourdough Bread', qty: '1 loaf' },
-    { name: 'Eggs (12ct)', qty: '12 count' },
-    { name: 'Orange Juice', qty: '1 bottle' }
-  ];
-  receiptItems.forEach(function (item) {
-    var key = item.name.toLowerCase().replace(/\s+/g, '-') + '-r' + Date.now();
-    invData[key] = { name: item.name, qty: item.qty, status: 'Plenty', statusClass: 'status-green' };
-    var card = document.createElement('div');
-    card.className = 'inventory-card';
-    card.setAttribute('data-inv-item', key);
-    card.innerHTML = '<div class="inventory-card-name">' + item.name + '</div><div class="inventory-card-qty">' + item.qty + '</div><span class="status-badge status-green">Plenty</span>';
-    document.querySelector('#invMineView .inventory-grid').appendChild(card);
-    card.addEventListener('click', function () {
-      var d = invData[key]; if (!d) return;
-      currentInvKey = key;
-      document.getElementById('invDetailName').textContent = d.name;
-      document.getElementById('invDetailQty').textContent = d.qty;
-      document.getElementById('invDetailStatus').innerHTML = '<span class="status-badge ' + d.statusClass + '">' + d.status + '</span>';
-      document.getElementById('invDetailActions').style.display = '';
-      document.getElementById('invDetailReadonly').style.display = 'none';
-      invDetailModal.classList.add('open');
-    });
-  });
-  showToast('4 items added to inventory!');
-});
-// Reset receipt scanner when switching to receipt tab
-function resetReceiptScanner() {
-  uploadArea.style.display = '';
-  scannerSpinner.classList.remove('show');
-  receiptResult.classList.remove('show');
-}
-
-document.getElementById('splitCostsBtn').addEventListener('click', function () {
-  // Switch to split costs tab
-  document.querySelectorAll('.mode-btn[data-fin]').forEach(function (b) { b.classList.remove('active'); });
-  document.querySelector('.mode-btn[data-fin="split"]').classList.add('active');
-  document.getElementById('finReceiptView').style.display = 'none';
-  document.getElementById('finSplitView').style.display = '';
-  showToast('Review your cost split below');
-});
-
-// Expense card expand
-document.querySelectorAll('.expense-card').forEach(function (card) {
-  card.addEventListener('click', function () {
-    var id = card.getAttribute('data-expense');
-    var detail = document.querySelector('.expense-details[data-expdetail="' + id + '"]');
-    if (detail) detail.classList.toggle('open');
-  });
-});
-
-// Receipt check toggles
-document.querySelectorAll('.receipt-check').forEach(function (check) {
-  check.addEventListener('click', function () {
-    if (check.textContent === '✓') { check.textContent = ''; check.style.background = '#fff'; }
-    else { check.textContent = '✓'; check.style.background = '#00C853'; }
-  });
-});
+// Finances screen removed — moved to Coming Soon
 
 // ===== TOGGLE SWITCHES =====
 document.querySelectorAll('.toggle-switch').forEach(function (toggle) {
@@ -915,6 +937,29 @@ function applyShoppingMode() {
     }
   }
 }
+
+// ===== COMING SOON — VOTING & FEEDBACK =====
+document.querySelectorAll('.cs-vote').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var voted = btn.getAttribute('data-voted') === 'true';
+    if (voted) {
+      btn.classList.remove('voted');
+      btn.setAttribute('data-voted', 'false');
+      showToast('Vote removed');
+    } else {
+      btn.classList.add('voted');
+      btn.setAttribute('data-voted', 'true');
+      showToast('Thanks for voting!');
+    }
+  });
+});
+
+document.getElementById('csFeedbackSubmit').addEventListener('click', function () {
+  var input = document.getElementById('csFeedbackInput');
+  if (!input.value.trim()) { showToast('Please enter your feedback'); return; }
+  showToast('Thanks for your feedback!');
+  input.value = '';
+});
 
 // ===== FILTER TABS (activity) =====
 document.querySelectorAll('.activity-filters .filter-tab').forEach(function (tab) {
