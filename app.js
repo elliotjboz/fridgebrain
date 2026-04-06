@@ -10,11 +10,30 @@ function showScreen(id) {
 }
 
 // ===== TOAST =====
-function showToast(msg) {
+var currentToastTimeout = null;
+function showToast(msg, isError, undoFn) {
   var toast = document.getElementById('toast');
-  toast.textContent = msg;
+  var text = document.getElementById('toastText');
+  var action = document.getElementById('toastAction');
+  text.textContent = msg;
+  toast.classList.remove('error');
+  if (isError) toast.classList.add('error');
   toast.classList.add('show');
-  setTimeout(function () { toast.classList.remove('show'); }, 2500);
+
+  if (undoFn) {
+    toast.classList.add('with-action');
+    action.onclick = function () {
+      undoFn();
+      toast.classList.remove('show', 'with-action');
+      if (currentToastTimeout) clearTimeout(currentToastTimeout);
+    };
+  } else {
+    toast.classList.remove('with-action');
+    action.onclick = null;
+  }
+
+  if (currentToastTimeout) clearTimeout(currentToastTimeout);
+  currentToastTimeout = setTimeout(function () { toast.classList.remove('show', 'error'); }, 4000);
 }
 
 // ===== HAMBURGER MENU =====
@@ -91,7 +110,7 @@ document.getElementById('joinHouseholdBack').addEventListener('click', function 
 
 document.getElementById('joinHouseholdBtn').addEventListener('click', function () {
   var code = document.getElementById('joinInviteCode').value;
-  if (!code.trim()) { showToast('Please enter an invite code'); return; }
+  if (!code.trim()) { showToast('Please enter an invite code', true); return; }
   showScreen('shopping');
   showToast('Joined household! Welcome!');
   joinForm.style.display = 'none';
@@ -101,10 +120,34 @@ document.getElementById('joinHouseholdBtn').addEventListener('click', function (
 // Sign out
 document.getElementById('profileSignout').addEventListener('click', function () { showScreen('login'); showToast('Signed out'); });
 
-// Leave household
-document.getElementById('leaveHousehold').addEventListener('click', function () {
+// Leave household — with confirmation
+var leaveModal = document.getElementById('leaveHouseholdModal');
+document.getElementById('leaveHouseholdBtn').addEventListener('click', function () { leaveModal.classList.add('open'); });
+document.getElementById('leaveHouseholdCancel').addEventListener('click', function () { leaveModal.classList.remove('open'); });
+document.getElementById('leaveHouseholdConfirm').addEventListener('click', function () {
+  leaveModal.classList.remove('open');
   showToast('You left the household');
   showScreen('onboarding');
+});
+
+// Remove member — with confirmation
+var removeMemberModal = document.getElementById('removeMemberModal');
+var pendingRemoveMember = '';
+document.querySelectorAll('.member-remove').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    pendingRemoveMember = btn.getAttribute('data-member');
+    document.getElementById('removeMemberText').textContent = pendingRemoveMember + ' will be removed from the household. They can rejoin with an invite code.';
+    removeMemberModal.classList.add('open');
+  });
+});
+document.getElementById('removeMemberCancel').addEventListener('click', function () { removeMemberModal.classList.remove('open'); });
+document.getElementById('removeMemberConfirm').addEventListener('click', function () {
+  removeMemberModal.classList.remove('open');
+  // Remove the member row from UI
+  document.querySelectorAll('.member-remove[data-member="' + pendingRemoveMember + '"]').forEach(function (btn) {
+    btn.closest('.member-row').style.display = 'none';
+  });
+  showToast(pendingRemoveMember + ' removed from household');
 });
 
 // Profile — copy invite code
@@ -121,6 +164,49 @@ document.getElementById('addStoreBtn').addEventListener('click', function () {
   showToast('Store added!');
 });
 
+// PWA banner — hide if already installed or dismissed
+var pwaBanner = document.getElementById('pwaBanner');
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+  pwaBanner.style.display = 'none';
+}
+document.getElementById('pwaDismiss').addEventListener('click', function () {
+  pwaBanner.style.display = 'none';
+});
+document.getElementById('pwaExpand').addEventListener('click', function () {
+  var instructions = document.getElementById('pwaInstructions');
+  var btn = document.getElementById('pwaExpand');
+  instructions.classList.toggle('open');
+  btn.classList.toggle('open');
+});
+
+// ===== STORE NOTIFICATION BANNER =====
+var storeNotifBanner = document.getElementById('storeNotifBanner');
+
+function showStoreNotification(personName, initials, avatarColor, store) {
+  document.getElementById('storeNotifAvatar').textContent = initials;
+  document.getElementById('storeNotifAvatar').style.background = avatarColor;
+  document.getElementById('storeNotifTitle').textContent = personName + ' is at ' + store;
+  storeNotifBanner.classList.add('show');
+  // Auto-dismiss after 12 seconds
+  clearTimeout(window._storeNotifTimeout);
+  window._storeNotifTimeout = setTimeout(function () {
+    storeNotifBanner.classList.remove('show');
+  }, 12000);
+}
+
+document.getElementById('storeNotifClose').addEventListener('click', function () {
+  storeNotifBanner.classList.remove('show');
+  clearTimeout(window._storeNotifTimeout);
+});
+
+document.getElementById('storeNotifAdd').addEventListener('click', function () {
+  storeNotifBanner.classList.remove('show');
+  clearTimeout(window._storeNotifTimeout);
+  showScreen('shopping');
+  setTimeout(function () { addItemModal.classList.add('open'); }, 200);
+});
+
+
 // ===== AVATAR → PROFILE =====
 document.querySelectorAll('.avatar').forEach(function (av) {
   av.addEventListener('click', function () { showScreen('profile'); });
@@ -133,7 +219,12 @@ document.getElementById('notifyFab').addEventListener('click', function () { not
 document.getElementById('notifyCancel').addEventListener('click', function () { notifyModal.classList.remove('open'); });
 document.getElementById('notifyConfirm').addEventListener('click', function () {
   notifyModal.classList.remove('open');
+  var store = document.getElementById('notifyStore').value.replace('📍 ', '');
   showToast('Household notified!');
+  // Show the banner as a preview of what household members will see
+  setTimeout(function () {
+    showStoreNotification('Elliot', 'EB', '#00C853', store);
+  }, 400);
 });
 
 // Household selector removed — single household in v1
@@ -150,6 +241,7 @@ var selectedItemName = '';
 function resetAddItemModal() {
   addItemInput.value = '';
   document.getElementById('addItemNotes').value = '';
+  document.getElementById('addItemQty').value = '';
   autocompleteResults.innerHTML = '';
   selectedItemArea.style.display = 'none';
   selectedItemName = '';
@@ -196,16 +288,35 @@ function selectItem(name) {
   addItemInput.parentElement.style.display = 'none';
 }
 
-function addItemToList(name, notes) {
+function updateEmptyStates() {
+  // Hide empty states when lists have items, show when empty
+  var myList = document.getElementById('myListItems');
+  var emptyMy = document.getElementById('emptyMyList');
+  if (emptyMy) emptyMy.style.display = myList.querySelector('.my-list-card:not([style*="display: none"])') ? 'none' : '';
+
+  var hhList = document.getElementById('householdListItems');
+  var emptyHH = document.getElementById('emptyHHList');
+  if (emptyHH) emptyHH.style.display = hhList.querySelector('.hh-list-card') ? 'none' : '';
+
+  var familyList = document.getElementById('familyListItems');
+  var emptyFamily = document.getElementById('emptyFamilyList');
+  if (emptyFamily) emptyFamily.style.display = familyList.querySelector('.my-list-card:not([style*="display: none"])') ? 'none' : '';
+}
+
+function addItemToList(name, notes, qty) {
+  qty = qty || '';
   // Add to My List (apartment day-to-day)
   var myListItems = document.getElementById('myListItems');
   var card = document.createElement('div');
   card.className = 'my-list-card';
   card.innerHTML = '<div class="my-list-accent"></div>' +
+    '<div class="drag-handle">☰</div>' +
     '<div class="my-list-info"><div class="my-list-name">' + name + '</div>' +
-    '<div class="my-list-note">' + notes + '</div></div>' +
+    (qty ? '<div class="my-list-qty">' + qty + '</div>' : '') +
+    (notes ? '<div class="my-list-note">' + notes + '</div>' : '') +
+    '</div>' +
     '<button class="my-list-remove">×</button>';
-  myListItems.appendChild(card);
+  myListItems.insertBefore(card, myListItems.firstChild);
   bindRemoveBtn(card.querySelector('.my-list-remove'));
   bindEditHandler(card);
 
@@ -214,7 +325,7 @@ function addItemToList(name, notes) {
   var storeItem = document.createElement('div');
   storeItem.className = 'store-item store-item-mine';
   storeItem.innerHTML = '<div class="store-check"></div><div class="store-item-name">' + name + '</div>';
-  storeMyItems.appendChild(storeItem);
+  storeMyItems.insertBefore(storeItem, storeMyItems.firstChild);
   storeItem.querySelector('.store-check').addEventListener('click', function () {
     this.classList.toggle('checked');
     storeItem.classList.toggle('checked-off');
@@ -226,9 +337,11 @@ function addItemToList(name, notes) {
   familyCard.className = 'my-list-card';
   familyCard.innerHTML = '<div class="my-list-accent" style="background:#00C853"></div>' +
     '<div class="my-list-info"><div class="my-list-name">' + name + '</div>' +
-    '<div class="my-list-note">' + notes + '</div></div>' +
+    (qty ? '<div class="my-list-qty">' + qty + '</div>' : '') +
+    (notes ? '<div class="my-list-note">' + notes + '</div>' : '') +
+    '</div>' +
     '<button class="my-list-remove">×</button>';
-  familyListItems.appendChild(familyCard);
+  familyListItems.insertBefore(familyCard, familyListItems.firstChild);
   bindEditHandler(familyCard);
   familyCard.querySelector('.my-list-remove').addEventListener('click', function () {
     familyCard.style.opacity = '0';
@@ -239,6 +352,7 @@ function addItemToList(name, notes) {
       removeItemByName('storeFamilyItems', name);
       addToSuggestionsData(name);
       refreshAllSuggestions();
+      updateEmptyStates();
       showToast('Removed from list');
     }, 200);
   });
@@ -248,12 +362,13 @@ function addItemToList(name, notes) {
   var storeFamilyItem = document.createElement('div');
   storeFamilyItem.className = 'store-item store-item-mine';
   storeFamilyItem.innerHTML = '<div class="store-check"></div><div class="store-item-name">' + name + '</div>';
-  storeFamilyItems.appendChild(storeFamilyItem);
+  storeFamilyItems.insertBefore(storeFamilyItem, storeFamilyItems.firstChild);
   storeFamilyItem.querySelector('.store-check').addEventListener('click', function () {
     this.classList.toggle('checked');
     storeFamilyItem.classList.toggle('checked-off');
   });
 
+  updateEmptyStates();
   if (!suppressAddedModal) {
     document.getElementById('addedItemText').textContent = name + ' added to your list';
     addedConfirmModal.classList.add('open');
@@ -276,6 +391,7 @@ document.getElementById('duplicateCancel').addEventListener('click', function ()
 document.getElementById('addItemConfirm').addEventListener('click', function () {
   var name = selectedItemName || 'New item';
   var notes = document.getElementById('addItemNotes').value || '';
+  var qty = document.getElementById('addItemQty').value || '';
   addItemModal.classList.remove('open');
 
   // Group-based duplicate check
@@ -306,7 +422,7 @@ document.getElementById('addItemConfirm').addEventListener('click', function () 
     return;
   }
 
-  addItemToList(name, notes);
+  addItemToList(name, notes, qty);
   resetAddItemModal();
 });
 document.getElementById('addedDone').addEventListener('click', function () {
@@ -451,16 +567,25 @@ function addToSuggestionsData(name) {
 document.getElementById('editItemDelete').addEventListener('click', function () {
   if (!editingCard) return;
   var name = editingCard.querySelector('.my-list-name').textContent;
-  editingCard.style.display = 'none';
+  var cardRef = editingCard;
+  cardRef.style.display = 'none';
   removeItemByName('storeMyItems', name);
   removeItemByName('familyListItems', name);
   removeItemByName('storeFamilyItems', name);
-  removeItemByName('myListItems', name);
   addToSuggestionsData(name);
   refreshAllSuggestions();
+  updateEmptyStates();
   editItemModal.classList.remove('open');
   editingCard = null;
-  showToast('Removed from list');
+  showToast('Removed from list', false, function () {
+    cardRef.style.display = '';
+    cardRef.style.opacity = '1';
+    restoreItemByName('storeMyItems', name);
+    restoreItemByName('familyListItems', name);
+    restoreItemByName('storeFamilyItems', name);
+    refreshAllSuggestions();
+    updateEmptyStates();
+  });
 });
 
 document.getElementById('editItemCancel').addEventListener('click', function () {
@@ -484,6 +609,76 @@ document.querySelectorAll('.list-item-check').forEach(function (check) {
     if (check.classList.contains('checked')) showToast('Marked as bought!');
   });
 });
+
+// ===== DRAG AND DROP SORTING =====
+function enableDragSort(container) {
+  if (!container || container._dragSetup) return;
+  container._dragSetup = true;
+  var draggedCard = null;
+
+  container.addEventListener('pointerdown', function (e) {
+    var handle = e.target.closest('.drag-handle');
+    if (!handle) return;
+    draggedCard = handle.closest('.my-list-card');
+    if (!draggedCard) return;
+    draggedCard.setAttribute('draggable', 'true');
+  });
+
+  container.addEventListener('dragstart', function (e) {
+    if (!draggedCard) return;
+    draggedCard.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  });
+
+  container.addEventListener('dragend', function () {
+    if (draggedCard) {
+      draggedCard.classList.remove('dragging');
+      draggedCard.removeAttribute('draggable');
+      draggedCard = null;
+    }
+    container.querySelectorAll('.my-list-card').forEach(function (c) { c.classList.remove('drag-over'); });
+  });
+
+  container.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    if (!draggedCard) return;
+    var target = e.target.closest('.my-list-card');
+    if (!target || target === draggedCard) return;
+    var rect = target.getBoundingClientRect();
+    var midpoint = rect.top + rect.height / 2;
+    if (e.clientY < midpoint) {
+      container.insertBefore(draggedCard, target);
+    } else {
+      container.insertBefore(draggedCard, target.nextSibling);
+    }
+  });
+}
+
+// Enable drag sort on list containers
+setTimeout(function () {
+  enableDragSort(document.getElementById('myListItems'));
+  enableDragSort(document.getElementById('familyListItems'));
+}, 0);
+
+// ===== INVENTORY SEARCH =====
+var invSearchInput = document.getElementById('invSearchInput');
+if (invSearchInput) {
+  invSearchInput.addEventListener('input', function () {
+    var q = invSearchInput.value.toLowerCase().trim();
+    document.querySelectorAll('.inv-view .inventory-card').forEach(function (card) {
+      var name = card.querySelector('.inventory-card-name');
+      if (!name) return;
+      var match = q === '' || name.textContent.toLowerCase().indexOf(q) > -1;
+      card.style.display = match ? '' : 'none';
+    });
+    // Hide empty person groups in household view
+    document.querySelectorAll('.inv-person-group').forEach(function (group) {
+      var visible = group.querySelectorAll('.inventory-card:not([style*="display: none"])').length;
+      group.style.display = visible ? '' : 'none';
+    });
+  });
+}
 
 // Remove item by name from a container's children
 function removeItemByName(containerId, name) {
@@ -513,8 +708,30 @@ function bindRemoveBtn(btn) {
       removeItemByName('storeFamilyItems', name);
       addToSuggestionsData(name);
       refreshAllSuggestions();
-      showToast('Removed from your list');
+      updateEmptyStates();
+      showToast('Removed from your list', false, function () {
+        // Undo — restore everything
+        card.style.display = '';
+        card.style.opacity = '1';
+        restoreItemByName('storeMyItems', name);
+        restoreItemByName('familyListItems', name);
+        restoreItemByName('storeFamilyItems', name);
+        refreshAllSuggestions();
+        updateEmptyStates();
+      });
     }, 200);
+  });
+}
+
+// Restore (unhide) a previously hidden item in a list
+function restoreItemByName(containerId, name) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.store-item-name, .my-list-name, .hh-list-name').forEach(function (el) {
+    if (el.textContent.trim() === name) {
+      var item = el.closest('.store-item, .my-list-card, .hh-list-card');
+      if (item) { item.style.display = ''; item.style.opacity = '1'; }
+    }
   });
 }
 document.querySelectorAll('#myListItems .my-list-remove').forEach(bindRemoveBtn);
@@ -541,6 +758,7 @@ document.querySelectorAll('#familyListItems .my-list-remove').forEach(function (
       removeItemByName('storeFamilyItems', name);
       addToSuggestionsData(name);
       refreshAllSuggestions();
+      updateEmptyStates();
       showToast('Removed from list');
     }, 200);
   });
@@ -593,6 +811,7 @@ function buildSuggestions(containerId) {
       suppressAddedModal = false;
       // Remove from all suggestion containers
       refreshAllSuggestions();
+      updateEmptyStates();
       showToast(name + ' added to your list');
     });
   });

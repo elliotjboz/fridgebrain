@@ -42,68 +42,40 @@
 </head>
 <body>
 
-<!-- SPLASH: The Fridge -->
+<!-- SPLASH: The Fridge Opens -->
 <div class="splash-overlay" id="splashOverlay">
-  <div class="sf-scene">
-    <div class="sf-zoom" id="sfZoom">
-      <div class="sf-fridge" id="sfFridge">
-        <div class="sf-top-section">
-          <div class="sf-top-interior">
-            <div class="sf-logo" id="sfLogo">
-              <div class="sf-logo-icon">🧊</div>
-              <div class="sf-logo-text">Fridge<span>Brain</span></div>
-            </div>
-          </div>
-          <div class="sf-top-door" id="sfTopDoor">
-            <div class="sf-handle-vertical"></div>
-          </div>
-        </div>
-        <div class="sf-divider"></div>
-        <div class="sf-bottom-section">
-          <div class="sf-handle-horizontal"></div>
-        </div>
-        <div class="sf-feet"><div class="sf-foot"></div><div class="sf-foot"></div></div>
-      </div>
-      <div class="sf-shadow"></div>
+  <div class="fridge-door" id="fridgeDoor">
+    <div class="fridge-handle"></div>
+  </div>
+  <div class="fridge-inside">
+    <div class="fridge-glow"></div>
+    <div class="splash-logo">
+      <div class="splash-icon">🧊</div>
+      <div class="splash-text">Fridge<span>Brain</span></div>
     </div>
   </div>
 </div>
 <style>
-  .splash-overlay { position: fixed; inset: 0; z-index: 9999; }
-  .sf-scene { position: absolute; inset: 0; background: #0E0E0E; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .sf-zoom { display: flex; flex-direction: column; align-items: center; animation: sfCameraZoom 2.8s linear forwards; }
-  @keyframes sfCameraZoom { 0% { transform: scale(0.9); opacity: 0; } 10% { opacity: 1; } 100% { transform: scale(2.2); } }
-  .sf-fridge { width: 160px; height: 300px; position: relative; display: flex; flex-direction: column; }
-  .sf-top-section { flex: 6; position: relative; overflow: hidden; background: #FAFAFA; border-radius: 6px 6px 0 0; border: 1px solid #E8E8E8; border-bottom: none; }
-  .sf-top-interior { position: absolute; inset: 4px; background: #E8E4DC; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
-  .sf-top-door { position: absolute; inset: 0; z-index: 3; background: linear-gradient(90deg, #F0F0F0 0%, #F7F7F7 30%, #FFFFFF 100%); border-radius: 6px 6px 0 0; box-shadow: 2px 0 16px rgba(0,0,0,0.08); transform-origin: left center; transform-style: preserve-3d; transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-  .sf-top-door::after { content: ''; position: absolute; top: 0; right: 0; width: 10px; height: 100%; background: linear-gradient(90deg, #E0E0E0, #D0D0D0); transform-origin: right center; transform: translateX(100%) rotateY(90deg); }
-  .sf-handle-vertical { position: absolute; right: 14px; top: 28%; height: 44%; width: 5px; background: linear-gradient(180deg, #E0E0E0, #C0C0C0, #E0E0E0); border-radius: 3px; box-shadow: 1px 0 4px rgba(0,0,0,0.08); }
-  .sf-divider { height: 2px; background: #E0E0E0; position: relative; z-index: 4; }
-  .sf-bottom-section { flex: 3; position: relative; background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%); border-radius: 0 0 6px 6px; border: 1px solid #E8E8E8; border-top: none; display: flex; align-items: center; justify-content: center; }
-  .sf-handle-horizontal { width: 50%; height: 5px; background: linear-gradient(90deg, #E0E0E0, #C8C8C8, #E0E0E0); border-radius: 3px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-top: -15%; }
-  .sf-feet { display: flex; justify-content: space-between; padding: 0 12px; position: relative; z-index: 4; }
-  .sf-foot { width: 16px; height: 6px; background: #D0D0D0; border-radius: 0 0 3px 3px; }
-  .sf-shadow { width: 140px; height: 12px; margin-top: 6px; background: radial-gradient(ellipse, rgba(255,255,255,0.05) 0%, transparent 70%); }
-  .sf-logo { text-align: center; z-index: 2; opacity: 0; transition: opacity 0.6s ease 0.3s; }
-  .sf-logo.show { opacity: 1; filter: drop-shadow(0 0 24px rgba(0, 200, 83, 0.4)) drop-shadow(0 0 60px rgba(0, 200, 83, 0.15)); }
-  .sf-logo.show .sf-logo-text { color: #FFFFFF; }
-  .sf-logo-icon { font-size: 32px; margin-bottom: 6px; }
-  .sf-logo-text { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: #1A1A1A; transition: color 0.6s ease; }
-  .sf-logo-text span { color: #00C853; }
-  .sf-top-door.open { transform: perspective(600px) rotateY(-110deg); }
-  .sf-fridge.dissolve .sf-top-door, .sf-fridge.dissolve .sf-divider, .sf-fridge.dissolve .sf-bottom-section, .sf-fridge.dissolve .sf-feet { transition: opacity 0.6s ease; opacity: 0; }
-  .sf-fridge.dissolve .sf-top-section { transition: background 0.6s ease, border-color 0.6s ease; background: transparent; border-color: transparent; }
-  .sf-fridge.dissolve .sf-top-interior { transition: background 0.6s ease; background: transparent; }
-  .splash-overlay.done { animation: sfOut 0.5s ease forwards; }
-  @keyframes sfOut { to { opacity: 0; visibility: hidden; } }
+  .splash-overlay { position: fixed; inset: 0; z-index: 9999; overflow: hidden; }
+  .fridge-inside { position: absolute; inset: 0; background: #0A0A0A; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .fridge-glow { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(0,200,83,0.12) 0%, transparent 70%); opacity: 0; animation: s1GlowIn 0.6s ease 0.8s forwards; }
+  .fridge-door { position: absolute; inset: 0; background: #1A1A1A; z-index: 2; transform-origin: right center; animation: s1DoorOpen 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards; }
+  .fridge-handle { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 4px; height: 60px; background: #333; border-radius: 2px; }
+  .splash-logo { text-align: center; z-index: 1; opacity: 0; animation: s1LogoIn 0.5s ease 1s forwards; }
+  .splash-icon { font-size: 52px; margin-bottom: 12px; }
+  .splash-text { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; color: #FFFFFF; }
+  .splash-text span { color: #00C853; }
+  .splash-overlay.done { animation: s1Out 0.5s ease forwards; }
+  @keyframes s1DoorOpen { to { transform: perspective(1200px) rotateY(-105deg); } }
+  @keyframes s1GlowIn { to { opacity: 1; } }
+  @keyframes s1LogoIn { to { opacity: 1; } }
+  @keyframes s1Out { to { opacity: 0; visibility: hidden; } }
 </style>
 <script>
-(function () {
-  setTimeout(function () { document.getElementById('sfTopDoor').classList.add('open'); document.getElementById('sfLogo').classList.add('show'); }, 1600);
-  setTimeout(function () { document.getElementById('sfFridge').classList.add('dissolve'); document.querySelector('.sf-shadow').style.transition = 'opacity 0.5s'; document.querySelector('.sf-shadow').style.opacity = '0'; }, 2800);
-  setTimeout(function () { document.getElementById('splashOverlay').classList.add('done'); setTimeout(function () { document.getElementById('splashOverlay').remove(); }, 500); }, 4200);
-})();
+  setTimeout(function() {
+    document.getElementById('splashOverlay').classList.add('done');
+    setTimeout(function() { document.getElementById('splashOverlay').remove(); }, 500);
+  }, 2200);
 </script>
 
 <div class="phone-frame">

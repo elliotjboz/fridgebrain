@@ -32,9 +32,7 @@ var groceryDB = [
   { name: "Regular Yogurt", group: "Yogurt", category: "Dairy" },
   { name: "Vanilla Yogurt", group: "Yogurt", category: "Dairy" },
   { name: "Sour Cream", group: "Sour Cream", category: "Dairy" },
-  { name: "Eggs (6ct)", group: "Eggs", category: "Dairy" },
-  { name: "Eggs (12ct)", group: "Eggs", category: "Dairy" },
-  { name: "Eggs (18ct)", group: "Eggs", category: "Dairy" },
+  { name: "Eggs", group: "Eggs", category: "Dairy" },
   { name: "Egg Whites", group: "Eggs", category: "Dairy" },
 
   // === PRODUCE ===
