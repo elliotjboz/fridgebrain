@@ -120,6 +120,22 @@ document.getElementById('joinHouseholdBtn').addEventListener('click', function (
 // Sign out
 document.getElementById('profileSignout').addEventListener('click', function () { showScreen('login'); showToast('Signed out'); });
 
+// Delete account
+var deleteAccountModal = document.getElementById('deleteAccountModal');
+if (document.getElementById('deleteAccountBtn')) {
+  document.getElementById('deleteAccountBtn').addEventListener('click', function () { deleteAccountModal.classList.add('open'); });
+}
+if (document.getElementById('deleteAccountCancel')) {
+  document.getElementById('deleteAccountCancel').addEventListener('click', function () { deleteAccountModal.classList.remove('open'); });
+}
+if (document.getElementById('deleteAccountConfirm')) {
+  document.getElementById('deleteAccountConfirm').addEventListener('click', function () {
+    deleteAccountModal.classList.remove('open');
+    showToast('Account scheduled for deletion');
+    showScreen('login');
+  });
+}
+
 // Leave household — with confirmation
 var leaveModal = document.getElementById('leaveHouseholdModal');
 document.getElementById('leaveHouseholdBtn').addEventListener('click', function () { leaveModal.classList.add('open'); });
@@ -159,10 +175,66 @@ document.getElementById('regenInviteCode').addEventListener('click', function ()
   showToast('New invite code generated');
 });
 
-// Add store
-document.getElementById('addStoreBtn').addEventListener('click', function () {
-  showToast('Store added!');
-});
+// ===== LINKED STORES =====
+function addStoreToApp(storeName) {
+  if (!storeName.trim()) return;
+  var displayName = '📍 ' + storeName.trim();
+
+  // Add to profile list
+  var list = document.getElementById('linkedStoresList');
+  if (list) {
+    var tag = document.createElement('span');
+    tag.className = 'store-tag';
+    tag.textContent = displayName;
+    list.appendChild(tag);
+  }
+
+  // Add to notify dropdown
+  var select = document.getElementById('notifyStore');
+  if (select) {
+    var opt = document.createElement('option');
+    opt.textContent = displayName;
+    // Insert before the "New store..." option
+    var otherOpt = select.querySelector('option[value="other"]');
+    select.insertBefore(opt, otherOpt);
+  }
+}
+
+// Add store from profile
+var addStoreModal = document.getElementById('addStoreModal');
+if (document.getElementById('addStoreBtn')) {
+  document.getElementById('addStoreBtn').addEventListener('click', function () { addStoreModal.classList.add('open'); });
+}
+if (document.getElementById('addStoreCancel')) {
+  document.getElementById('addStoreCancel').addEventListener('click', function () {
+    addStoreModal.classList.remove('open');
+    document.getElementById('newStoreName').value = '';
+  });
+}
+if (document.getElementById('addStoreConfirm')) {
+  document.getElementById('addStoreConfirm').addEventListener('click', function () {
+    var name = document.getElementById('newStoreName').value;
+    if (!name.trim()) { showToast('Please enter a store name', true); return; }
+    addStoreToApp(name);
+    addStoreModal.classList.remove('open');
+    document.getElementById('newStoreName').value = '';
+    showToast(name + ' added!');
+  });
+}
+
+// Notify — show/hide new store input
+var notifyStore = document.getElementById('notifyStore');
+var notifyNewStoreWrap = document.getElementById('notifyNewStoreWrap');
+if (notifyStore) {
+  notifyStore.addEventListener('change', function () {
+    if (notifyStore.value === 'other') {
+      notifyNewStoreWrap.style.display = '';
+      document.getElementById('notifyNewStoreName').focus();
+    } else {
+      notifyNewStoreWrap.style.display = 'none';
+    }
+  });
+}
 
 // PWA banner — hide if already installed or dismissed
 var pwaBanner = document.getElementById('pwaBanner');
@@ -218,13 +290,23 @@ var notifyModal = document.getElementById('notifyModal');
 document.getElementById('notifyFab').addEventListener('click', function () { notifyModal.classList.add('open'); });
 document.getElementById('notifyCancel').addEventListener('click', function () { notifyModal.classList.remove('open'); });
 document.getElementById('notifyConfirm').addEventListener('click', function () {
+  var storeSelect = document.getElementById('notifyStore');
+  var store;
+
+  if (storeSelect.value === 'other') {
+    var newName = document.getElementById('notifyNewStoreName').value.trim();
+    if (!newName) { showToast('Please enter a store name', true); return; }
+    store = newName;
+    addStoreToApp(newName);
+    document.getElementById('notifyNewStoreName').value = '';
+    notifyNewStoreWrap.style.display = 'none';
+    storeSelect.value = '📍 ' + newName;
+  } else {
+    store = storeSelect.value.replace('📍 ', '');
+  }
+
   notifyModal.classList.remove('open');
-  var store = document.getElementById('notifyStore').value.replace('📍 ', '');
   showToast('Household notified!');
-  // Show the banner as a preview of what household members will see
-  setTimeout(function () {
-    showStoreNotification('Elliot', 'EB', '#00C853', store);
-  }, 400);
 });
 
 // Household selector removed — single household in v1

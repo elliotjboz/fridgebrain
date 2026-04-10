@@ -125,7 +125,7 @@
     </div>
     <div class="store-notif-actions">
       <button class="btn btn-primary" id="storeNotifAdd">Add to list</button>
-      <button class="store-notif-close" id="storeNotifClose">✕</button>
+      <button class="store-notif-close" id="storeNotifClose" aria-label="Dismiss notification">✕</button>
     </div>
   </div>
 
@@ -135,7 +135,7 @@
   <!-- SLIDE MENU -->
   <div class="slide-menu" id="slideMenu">
     <div class="menu-user">
-      <div class="avatar">EB</div>
+      <div class="avatar" role="button" aria-label="Profile">EB</div>
       <div class="menu-user-info">
         <h4>Elliot Boz</h4>
         <p>elliot.j.boz@gmail.com</p>
@@ -161,11 +161,11 @@
       <h1>Fridge<span>Brain</span></h1>
     </div>
     <div class="login-welcome">Your household grocery brain</div>
-    <button class="btn-google" id="googleSignIn">
+    <button class="btn-google" id="googleSignIn" aria-label="Sign in with Google">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0124 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 01-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
       Continue with Google
     </button>
-    <div class="login-terms">By continuing, you agree to our Terms of Service and Privacy Policy</div>
+    <div class="login-terms">By continuing, you agree to our <a href="terms.html" style="color:#00C853">Terms of Service</a> and <a href="privacy.html" style="color:#00C853">Privacy Policy</a></div>
   </div>
 
   <!-- ==================== SCREEN: ONBOARDING ==================== -->
@@ -224,7 +224,7 @@
   <!-- ==================== SCREEN: SHOPPING LIST ==================== -->
   <div class="screen" id="screen-shopping">
     <div class="top-bar">
-      <button class="coming-soon-btn" onclick="showScreen('comingsoon')">🚀</button><div class="top-bar-logo" style="position:absolute;left:50%;transform:translateX(-50%)">Fridge<span>Brain</span></div><div class="topbar-right"><button class="topbar-notify" id="topbarNotifyBtn">📣 Notify</button><div class="avatar">EB</div></div>
+      <button class="coming-soon-btn" aria-label="Coming soon" onclick="showScreen('comingsoon')">🚀</button><div class="top-bar-logo" style="position:absolute;left:50%;transform:translateX(-50%)">Fridge<span>Brain</span></div><div class="topbar-right"><button class="topbar-notify" id="topbarNotifyBtn" aria-label="Notify household">📣 Notify</button><div class="avatar" role="button" aria-label="Profile">EB</div></div>
     </div>
 
     <!-- Add to Home Screen Banner -->
@@ -269,26 +269,26 @@
       </div>
       <div id="myListItems">
         <div class="my-list-card">
-          <div class="my-list-accent"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Eggs</div>
             <div class="my-list-qty">12 count</div>
             <div class="my-list-note">Free range preferred</div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
         <div class="my-list-card">
-          <div class="my-list-accent"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Oat Milk</div>
             <div class="my-list-note">Oatly barista edition</div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
         <div class="my-list-card">
-          <div class="my-list-accent"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Avocados</div>
             <div class="my-list-note"></div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
       </div>
 
@@ -346,40 +346,40 @@
       <div class="empty-state-inline" id="emptyFamilyList" style="display:none">Your list is empty — tap + to add</div>
       <div id="familyListItems">
         <div class="my-list-card">
-          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Eggs</div>
             <div class="my-list-qty">12 count</div>
             <div class="my-list-note">Free range preferred</div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
         <div class="my-list-card">
-          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Whole Milk</div>
             <div class="my-list-note"></div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
         <div class="my-list-card">
-          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Sourdough Bread</div>
             <div class="my-list-note">From the bakery section</div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
         <div class="my-list-card">
-          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Olive Oil</div>
             <div class="my-list-note">Extra virgin</div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
         <div class="my-list-card">
-          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle">☰</div><div class="my-list-info">
+          <div class="my-list-accent" style="background:#00C853"></div><div class="drag-handle" aria-label="Drag to reorder">☰</div><div class="my-list-info">
             <div class="my-list-name">Greek Yogurt</div>
             <div class="my-list-note"></div>
           </div>
-          <button class="my-list-remove">×</button>
+          <button class="my-list-remove" aria-label="Remove item">×</button>
         </div>
       </div>
 
@@ -553,7 +553,11 @@
           <option>📍 Whole Foods</option>
           <option>📍 Trader Joe's</option>
           <option>📍 Target</option>
+          <option value="other">+ New store...</option>
         </select>
+        <div class="input-group" id="notifyNewStoreWrap" style="display:none;margin-top:8px">
+          <input type="text" id="notifyNewStoreName" placeholder="Type store name...">
+        </div>
         <button class="btn btn-primary" id="notifyConfirm" style="margin-top:16px">Send notification</button>
         <button class="btn btn-secondary" id="notifyCancel">Cancel</button>
       </div>
@@ -567,9 +571,9 @@
   <!-- ==================== SCREEN: INVENTORY ==================== -->
   <div class="screen" id="screen-inventory">
     <div class="top-bar">
-      <button class="coming-soon-btn" onclick="showScreen('comingsoon')">🚀</button>
+      <button class="coming-soon-btn" aria-label="Coming soon" onclick="showScreen('comingsoon')">🚀</button>
       <div class="top-bar-logo">Fridge<span>Brain</span></div>
-      <div class="avatar">EB</div>
+      <div class="avatar" role="button" aria-label="Profile">EB</div>
     </div>
 
     <div class="section-header">Inventory</div>
@@ -705,9 +709,9 @@
   <!-- ==================== SCREEN: RECIPES ==================== -->
   <div class="screen" id="screen-recipes">
     <div class="top-bar">
-      <button class="coming-soon-btn" onclick="showScreen('comingsoon')">🚀</button>
+      <button class="coming-soon-btn" aria-label="Coming soon" onclick="showScreen('comingsoon')">🚀</button>
       <div class="top-bar-logo">Fridge<span>Brain</span></div>
-      <div class="avatar">EB</div>
+      <div class="avatar" role="button" aria-label="Profile">EB</div>
     </div>
 
     <div class="section-header">Recipes</div>
@@ -738,9 +742,9 @@
   <!-- ==================== SCREEN: COMING SOON ==================== -->
   <div class="screen" id="screen-comingsoon">
     <div class="top-bar">
-      <button class="coming-soon-btn" onclick="showScreen('comingsoon')">🚀</button>
+      <button class="coming-soon-btn" aria-label="Coming soon" onclick="showScreen('comingsoon')">🚀</button>
       <div class="top-bar-logo">Fridge<span>Brain</span></div>
-      <div class="avatar">EB</div>
+      <div class="avatar" role="button" aria-label="Profile">EB</div>
     </div>
 
     <div class="section-header">Coming Soon</div>
@@ -816,9 +820,9 @@
   <!-- ==================== SCREEN: ACTIVITY ==================== -->
   <div class="screen" id="screen-activity">
     <div class="top-bar">
-      <button class="coming-soon-btn" onclick="showScreen('comingsoon')">🚀</button>
+      <button class="coming-soon-btn" aria-label="Coming soon" onclick="showScreen('comingsoon')">🚀</button>
       <div class="top-bar-logo">Fridge<span>Brain</span></div>
-      <div class="avatar">EB</div>
+      <div class="avatar" role="button" aria-label="Profile">EB</div>
     </div>
     <div class="section-header">Activity</div>
     <div class="activity-filters">
@@ -847,9 +851,9 @@
   <!-- ==================== SCREEN: PROFILE ==================== -->
   <div class="screen" id="screen-profile">
     <div class="top-bar">
-      <button class="coming-soon-btn" onclick="showScreen('comingsoon')">🚀</button>
+      <button class="coming-soon-btn" aria-label="Coming soon" onclick="showScreen('comingsoon')">🚀</button>
       <div class="top-bar-logo">Fridge<span>Brain</span></div>
-      <div class="avatar">EB</div>
+      <div class="avatar" role="button" aria-label="Profile">EB</div>
     </div>
     <div class="profile-content">
       <div class="profile-header">
@@ -878,17 +882,17 @@
           <div class="member-row">
             <div class="hh-avatar" style="background:#42A5F5">SH</div>
             <div class="member-info"><span class="member-name">Shura</span></div>
-            <button class="member-remove" data-member="Shura">✕</button>
+            <button class="member-remove" aria-label="Remove member" data-member="Shura">✕</button>
           </div>
           <div class="member-row">
             <div class="hh-avatar" style="background:#AB47BC">NA</div>
             <div class="member-info"><span class="member-name">Nadia</span></div>
-            <button class="member-remove" data-member="Nadia">✕</button>
+            <button class="member-remove" aria-label="Remove member" data-member="Nadia">✕</button>
           </div>
           <div class="member-row">
             <div class="hh-avatar" style="background:#FF9800">KA</div>
             <div class="member-info"><span class="member-name">Kalman</span></div>
-            <button class="member-remove" data-member="Kalman">✕</button>
+            <button class="member-remove" aria-label="Remove member" data-member="Kalman">✕</button>
           </div>
 
       <!-- Remove Member Confirmation -->
@@ -926,16 +930,31 @@
 
       <div class="profile-section">
         <div class="profile-section-title">Notifications</div>
-        <div class="toggle-row"><span class="toggle-label">Someone is at the store</span><div class="toggle-switch on"></div></div>
-        <div class="toggle-row"><span class="toggle-label">Item added to list</span><div class="toggle-switch on"></div></div>
-        <div class="toggle-row"><span class="toggle-label">Running low reminder</span><div class="toggle-switch"></div></div>
+        <div class="toggle-row"><span class="toggle-label">Store trip alerts</span><div class="toggle-switch on"></div></div>
       </div>
 
       <div class="profile-section">
         <div class="profile-section-title">Linked Stores</div>
-        <div><span class="store-tag">📍 Whole Foods</span><span class="store-tag">📍 Trader Joe's</span><span class="store-tag">📍 Target</span></div>
+        <div id="linkedStoresList">
+          <span class="store-tag">📍 Whole Foods</span>
+          <span class="store-tag">📍 Trader Joe's</span>
+          <span class="store-tag">📍 Target</span>
+        </div>
         <div class="profile-buttons">
           <button class="btn btn-secondary" id="addStoreBtn">Add a store</button>
+        </div>
+      </div>
+
+      <!-- Add Store Modal -->
+      <div class="modal-overlay" id="addStoreModal">
+        <div class="modal" style="text-align:left">
+          <h3 style="text-align:center">Add a store</h3>
+          <div class="input-group" style="margin-top:16px">
+            <label>Store name</label>
+            <input type="text" id="newStoreName" placeholder="e.g. Costco, Aldi, Safeway">
+          </div>
+          <button class="btn btn-primary" id="addStoreConfirm" style="margin-top:12px">Add store</button>
+          <button class="btn btn-secondary" id="addStoreCancel">Cancel</button>
         </div>
       </div>
 
@@ -950,29 +969,41 @@
           <button class="btn btn-secondary" id="leaveHouseholdCancel">Cancel</button>
         </div>
       </div>
-      <button class="btn btn-danger" id="profileSignout" style="margin-top:8px">Sign Out</button>
+      <div class="profile-section"><div class="profile-section-title">Legal</div><div style="display:flex;gap:16px"><a href="privacy.html" style="font-size:14px;color:#757575">Privacy Policy</a><a href="terms.html" style="font-size:14px;color:#757575">Terms of Service</a></div></div>
+
+      <!-- Delete Account Confirmation -->
+      <div class="modal-overlay" id="deleteAccountModal">
+        <div class="modal">
+          <h3>Delete your account?</h3>
+          <p>All your data will be permanently deleted within 30 days. This cannot be undone.</p>
+          <button class="btn btn-danger" id="deleteAccountConfirm">Yes, delete my account</button>
+          <button class="btn btn-secondary" id="deleteAccountCancel">Cancel</button>
+        </div>
+      </div>
+
+      <button class="btn btn-danger" id="deleteAccountBtn" style="margin-top:16px">Delete account</button><button class="btn btn-danger" id="profileSignout" style="margin-top:8px;background:#fff;color:#FF3B30;border:1px solid #FF3B30">Sign Out</button>
     </div>
   </div>
 
   <!-- BOTTOM TAB BAR -->
   <div class="tab-bar" id="tabBar">
-    <button class="tab-item active" data-tab="shopping">
+    <button class="tab-item active" data-tab="shopping" aria-label="Shopping list">
       <span class="tab-icon">🛒</span>
       <span class="tab-label">Shopping</span>
     </button>
-    <button class="tab-item" data-tab="inventory">
+    <button class="tab-item" data-tab="inventory" aria-label="Inventory">
       <span class="tab-icon">📦</span>
       <span class="tab-label">Inventory</span>
     </button>
-    <button class="tab-item-add" id="tabAddBtn">
+    <button class="tab-item-add" id="tabAddBtn" aria-label="Add item">
       <div class="tab-add-circle">+</div>
       <span class="tab-add-label">Add</span>
     </button>
-    <button class="tab-item" data-tab="recipes">
+    <button class="tab-item" data-tab="recipes" aria-label="Recipes">
       <span class="tab-icon">🍳</span>
       <span class="tab-label">Recipes</span>
     </button>
-    <button class="tab-item" data-tab="profile">
+    <button class="tab-item" data-tab="profile" aria-label="Profile">
       <span class="tab-icon">👤</span>
       <span class="tab-label">Profile</span>
     </button>
